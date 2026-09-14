@@ -1,0 +1,526 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap');
+
+/* ──────────────────────────────────────────
+   Root / Page
+────────────────────────────────────────── */
+.pi-page {
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 50% 0%, #8b0000 0%, #5a0000 40%, #3d0000 70%, #2a0000 100%);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  color: #f5e6c8;
+  padding: 0;
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────
+   Loading / Error States
+────────────────────────────────────────── */
+.pi-loading,
+.pi-error {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: radial-gradient(ellipse at 50% 0%, #8b0000 0%, #3d0000 70%, #2a0000 100%);
+  color: #c9a84c;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.15em;
+  font-size: 0.875rem;
+}
+
+.pi-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(201, 168, 76, 0.2);
+  border-top-color: #c9a84c;
+  border-radius: 50%;
+  animation: piSpin 0.9s linear infinite;
+}
+
+@keyframes piSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ──────────────────────────────────────────
+   Wrapper (single-column centered)
+────────────────────────────────────────── */
+.pi-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  animation: piFadeUp 0.7s ease-out both;
+}
+
+@keyframes piFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ──────────────────────────────────────────
+   Section 1 - Hero Header
+────────────────────────────────────────── */
+.pi-hero-header {
+  text-align: center;
+  padding: 2rem 1.5rem 1.5rem;
+}
+
+.pi-tagline {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.35em;
+  color: #c9a84c;
+  text-transform: uppercase;
+  margin: 0 0 1rem 0;
+}
+
+.pi-couple-name {
+  font-family: 'Great Vibes', cursive;
+  font-size: 3.4rem;
+  color: #d4a843;
+  margin: 0;
+  line-height: 1.1;
+  font-weight: 400;
+}
+
+.pi-diamond {
+  color: #c9a84c;
+  font-size: 1.1rem;
+  margin: 0.75rem 0;
+  display: block;
+  text-align: center;
+}
+
+.pi-invite-sub {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: #c9a84c;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────
+   Section 2 - Couple Photo
+────────────────────────────────────────── */
+.pi-photo-frame {
+  margin: 0.5rem 0.25rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  overflow: hidden;
+  background: rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(201,168,76,0.1);
+  aspect-ratio: 4/3;
+}
+
+.pi-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ──────────────────────────────────────────
+   Section 3 - Guest Card
+────────────────────────────────────────── */
+.pi-guest-card {
+  margin: 0 0.25rem 1.75rem;
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 0.875rem;
+  padding: 2rem 1.75rem;
+  background: rgba(0,0,0,0.18);
+  text-align: center;
+}
+
+.pi-reserved-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  margin: 0 0 0.75rem;
+}
+
+.pi-honoured-guest {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.4rem;
+  color: #d4a843;
+  margin: 0 0 1.25rem;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.pi-guest-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #c9a84c, transparent);
+  margin: 0 auto 1.25rem;
+}
+
+.pi-quote {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #f0dba8;
+  line-height: 1.65;
+  margin: 0 0 1rem;
+  font-weight: 400;
+}
+
+.pi-subtext {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  color: rgba(245, 230, 200, 0.7);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────
+   Section 4 - Countdown
+────────────────────────────────────────── */
+.pi-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.625rem;
+  margin: 0 0.25rem 1.75rem;
+}
+
+.pi-countdown-box {
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 0.75rem;
+  padding: 0.875rem 0.5rem;
+  text-align: center;
+  background: rgba(0,0,0,0.18);
+}
+
+.pi-countdown-num {
+  font-family: 'Cinzel', serif;
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: #f5e6c8;
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.pi-countdown-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c9a84c;
+}
+
+/* ──────────────────────────────────────────
+   Section 5 - Calendar
+────────────────────────────────────────── */
+.pi-calendar-wrap {
+  margin: 0 0.25rem 1.75rem;
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 0.875rem;
+  padding: 1.75rem 1.5rem;
+  background: rgba(0,0,0,0.18);
+}
+
+.pi-save-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  text-align: center;
+  margin: 0 0 0.35rem;
+}
+
+.pi-cal-month {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: #f5e6c8;
+  text-align: center;
+  margin: 0 0 0.6rem;
+}
+
+.pi-cal-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.pi-cal-divider::before,
+.pi-cal-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(201, 168, 76, 0.5);
+}
+
+.pi-cal-divider-diamond {
+  color: #c9a84c;
+  font-size: 0.8rem;
+}
+
+.pi-calendar {
+  width: 100%;
+}
+
+.pi-cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.4rem;
+}
+
+.pi-cal-wd {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: rgba(201, 168, 76, 0.7);
+  padding: 0.25rem 0;
+}
+
+.pi-cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.pi-cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.875rem;
+  color: rgba(245, 230, 200, 0.85);
+  border-radius: 50%;
+  cursor: default;
+}
+
+.pi-cal-day.empty {
+  color: rgba(245, 230, 200, 0.2);
+}
+
+.pi-cal-day.wedding-day {
+  background: #c9a84c;
+  color: #3d0000;
+  font-weight: 700;
+  position: relative;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pi-cal-day.wedding-day::after {
+  content: '\2666';
+  font-size: 0.35rem;
+  position: absolute;
+  bottom: 4px;
+  color: #3d0000;
+}
+
+/* ──────────────────────────────────────────
+   Section 6 - Venue
+────────────────────────────────────────── */
+.pi-venue-card {
+  margin: 0 0.25rem 1.75rem;
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 0.875rem;
+  padding: 1.75rem 1.5rem;
+  background: rgba(0,0,0,0.18);
+  text-align: center;
+}
+
+.pi-venue-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  margin: 0 0 0.5rem;
+}
+
+.pi-venue-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #d4a843;
+  margin: 0 0 0.4rem;
+  line-height: 1.2;
+}
+
+.pi-venue-address {
+  font-size: 0.875rem;
+  color: rgba(245, 230, 200, 0.7);
+  margin: 0 0 1.25rem;
+}
+
+.pi-venue-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
+}
+
+.pi-venue-divider::before,
+.pi-venue-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(201, 168, 76, 0.4);
+}
+
+.pi-venue-divider span {
+  color: #c9a84c;
+  font-size: 0.8rem;
+}
+
+.pi-event-pills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+}
+
+.pi-event-pill {
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 0.625rem;
+  padding: 0.875rem 0.5rem;
+  text-align: center;
+  background: rgba(0,0,0,0.15);
+}
+
+.pi-pill-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(201, 168, 76, 0.7);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.pi-pill-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f5e6c8;
+  display: block;
+  line-height: 1.2;
+}
+
+.pi-map-btn {
+  display: inline-block;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid #c9a84c;
+  color: #c9a84c;
+  font-family: 'Cinzel', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.75rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.pi-map-btn:hover {
+  background: #c9a84c;
+  color: #3d0000;
+}
+
+/* ──────────────────────────────────────────
+   Section 7 - QR Entry Pass
+────────────────────────────────────────── */
+.pi-qr-card {
+  margin: 0 0.25rem 1.75rem;
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  border-radius: 0.875rem;
+  padding: 1.75rem 1.5rem;
+  background: rgba(0,0,0,0.18);
+  text-align: center;
+}
+
+.pi-qr-label {
+  font-family: 'Cinzel', serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #c9a84c;
+  margin: 0 0 0.5rem;
+}
+
+.pi-qr-title {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2rem;
+  color: #d4a843;
+  font-weight: 400;
+  margin: 0 0 1.25rem;
+}
+
+.pi-qr-box {
+  background: #fff8ed;
+  display: inline-flex;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  margin-bottom: 1rem;
+}
+
+.pi-qr-note {
+  font-size: 0.85rem;
+  color: rgba(245, 230, 200, 0.65);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────
+   Section 8 - Footer Signature
+────────────────────────────────────────── */
+.pi-footer-sig {
+  text-align: center;
+  padding: 1.5rem 1rem 2rem;
+}
+
+.pi-footer-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.pi-footer-divider::before,
+.pi-footer-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(201, 168, 76, 0.35);
+}
+
+.pi-footer-divider span {
+  color: #c9a84c;
+  font-size: 0.8rem;
+}
+
+.pi-footer-names {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2rem;
+  color: #d4a843;
+  margin: 0 0 0.4rem;
+  font-weight: 400;
+}
+
+.pi-footer-date {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  color: rgba(201, 168, 76, 0.65);
+  margin: 0;
+}
