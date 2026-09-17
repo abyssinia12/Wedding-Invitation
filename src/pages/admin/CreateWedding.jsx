@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
+import StyleSelectorBar from "../../components/StyleSelectorBar";
 import "./CreateWedding.css";
 
 const PRESET_IMAGES = [
@@ -31,7 +32,8 @@ export default function CreateWedding() {
     longitude: "",
     message: "",
     image_url: PRESET_IMAGES[0],
-    status: "draft"
+    status: "draft",
+    theme: "first"
   });
 
   useEffect(() => {
@@ -142,14 +144,38 @@ export default function CreateWedding() {
         location_address: formData.location_address ? formData.location_address.trim() : null,
         latitude: formData.latitude ? parseFloat(formData.latitude) : null,
         longitude: formData.longitude ? parseFloat(formData.longitude) : null,
-        status: formData.status || "draft"
+        status: formData.status || "draft",
+        theme: formData.theme || "first"
       };
 
-      const { data, error: insertErr } = await supabase
+      // Try inserting with theme
+      let { data, error: insertErr } = await supabase
         .from("weddings")
         .insert([payload])
         .select()
         .single();
+
+      // If Supabase table doesn't have the 'theme' column yet, retry without 'theme'
+      if (insertErr && (insertErr.message?.includes("theme") || insertErr.code === "PGRST204")) {
+        const { theme: _, ...payloadWithoutTheme } = payload;
+        const retryResult = await supabase
+          .from("weddings")
+          .insert([payloadWithoutTheme])
+          .select()
+          .single();
+
+        data = retryResult.data;
+        insertErr = retryResult.error;
+
+        // Remember user's chosen theme for this wedding in localStorage
+        if (data?.id) {
+          try {
+            localStorage.setItem(`wedding_theme_${data.id}`, formData.theme);
+          } catch (e) {
+            console.warn("Could not save theme to localStorage", e);
+          }
+        }
+      }
 
       if (insertErr) {
         throw new Error(insertErr.message);
@@ -456,6 +482,44 @@ export default function CreateWedding() {
             </div>
           </div>
 
+          {/* Section 6: Invitation Style Selection */}
+          <div className="form-section">
+            <h2 className="form-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+              6. Choose Invitation Style
+            </h2>
+            <div style={{
+              background: "rgba(15, 23, 42, 0.7)",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+              borderRadius: "0.875rem",
+              padding: "1.25rem 1rem",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "0.75rem"
+            }}>
+              <p style={{ margin: 0, fontSize: "0.875rem", color: "#94a3b8", textAlign: "center" }}>
+                Select the invitation style using the bar below (or via the floating bar pinned at the bottom):
+              </p>
+              <div style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                padding: "0.35rem 0.75rem",
+                borderRadius: "9999px",
+                background: "rgba(99, 102, 241, 0.15)",
+                border: "1px solid rgba(99, 102, 241, 0.35)",
+                color: "#c7d2fe",
+                fontSize: "0.825rem",
+                fontWeight: 600
+              }}>
+                Current Selected Style: <span style={{ textTransform: "capitalize", color: "#ffffff", fontWeight: 700 }}>{formData.theme}</span>
+              </div>
+            </div>
+          </div>
+
           <div className="form-actions">
             <Link to="/admin/dashboard" className="btn-secondary">
               Cancel
@@ -473,6 +537,14 @@ export default function CreateWedding() {
           </div>
         </form>
       </div>
+
+      {/* Floating Glassmorphic Style Switcher Bar pinned to bottom */}
+      <StyleSelectorBar
+        currentStyle={formData.theme}
+        onSelectStyle={(selectedStyle) =>
+          setFormData((prev) => ({ ...prev, theme: selectedStyle }))
+        }
+      />
     </div>
   );
 }

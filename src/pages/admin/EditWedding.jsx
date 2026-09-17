@@ -3,6 +3,31 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import "./CreateWedding.css";
 import "./EditWedding.css";
+import "./ThemePicker.css";
+
+const THEMES = [
+  {
+    key: "classic",
+    name: "Classic Crimson & Gold",
+    desc: "Timeless dark red velvet with golden accents",
+    swatch: ["#8b0000", "#c9a84c", "#f5e6c8"],
+    emoji: "🌹",
+  },
+  {
+    key: "garden",
+    name: "Garden Blush",
+    desc: "Soft sage green with romantic blush pink tones",
+    swatch: ["#3d5a47", "#d4a0a0", "#fdf6f0"],
+    emoji: "🌸",
+  },
+  {
+    key: "midnight",
+    name: "Midnight Velvet",
+    desc: "Deep navy blue with champagne gold shimmer",
+    swatch: ["#0d1b3e", "#c8a96e", "#e8dcc8"],
+    emoji: "✨",
+  },
+];
 
 const PRESET_IMAGES = [
   "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
@@ -32,7 +57,8 @@ export default function EditWedding() {
     longitude: "",
     message: "",
     image_url: PRESET_IMAGES[0],
-    status: "draft"
+    status: "draft",
+    theme: "classic"
   });
 
   useEffect(() => {
@@ -89,7 +115,8 @@ export default function EditWedding() {
         longitude: wedding.longitude !== null ? String(wedding.longitude) : "",
         message: wedding.message || "",
         image_url: wedding.image_url || PRESET_IMAGES[0],
-        status: wedding.status || "draft"
+        status: wedding.status || "draft",
+        theme: wedding.theme || "classic"
       });
     } catch (err) {
       console.error("Fetch wedding error:", err);
@@ -134,14 +161,34 @@ export default function EditWedding() {
         latitude: formData.latitude ? parseFloat(formData.latitude) : null,
         longitude: formData.longitude ? parseFloat(formData.longitude) : null,
         status: formData.status || "draft",
+        theme: formData.theme || "first",
         updated_at: new Date().toISOString()
       };
 
-      const { error: updateErr } = await supabase
+      let { error: updateErr } = await supabase
         .from("weddings")
         .update(payload)
         .eq("id", id)
         .eq("admin_id", admin.id);
+
+      // If Supabase table doesn't have the 'theme' column yet, retry without 'theme'
+      if (updateErr && (updateErr.message?.includes("theme") || updateErr.code === "PGRST204")) {
+        const { theme: _, ...payloadWithoutTheme } = payload;
+        const retryResult = await supabase
+          .from("weddings")
+          .update(payloadWithoutTheme)
+          .eq("id", id)
+          .eq("admin_id", admin.id);
+
+        updateErr = retryResult.error;
+
+        // Remember user's chosen theme for this wedding in localStorage
+        try {
+          localStorage.setItem(`wedding_theme_${id}`, formData.theme);
+        } catch (e) {
+          console.warn("Could not save theme to localStorage", e);
+        }
+      }
 
       if (updateErr) {
         throw new Error(updateErr.message);
@@ -424,6 +471,39 @@ export default function EditWedding() {
                 <option value="published">Published (Live to Guests)</option>
                 <option value="closed">Closed (Event Finished)</option>
               </select>
+            </div>
+          </div>
+
+          {/* Section 6: Invitation Style */}
+          <div className="form-section">
+            <h2 className="form-section-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+              6. Invitation Page Style
+            </h2>
+            <p className="theme-picker-hint">Choose the visual theme your guests will see on their invitation.</p>
+            <div className="theme-picker-grid">
+              {THEMES.map((theme) => (
+                <button
+                  key={theme.key}
+                  type="button"
+                  className={`theme-card ${formData.theme === theme.key ? "theme-card--active" : ""}`}
+                  onClick={() => setFormData((prev) => ({ ...prev, theme: theme.key }))}
+                >
+                  <div className="theme-card__swatches">
+                    {theme.swatch.map((color, i) => (
+                      <span key={i} className="theme-card__swatch" style={{ background: color }} />
+                    ))}
+                  </div>
+                  <div className="theme-card__emoji">{theme.emoji}</div>
+                  <div className="theme-card__name">{theme.name}</div>
+                  <div className="theme-card__desc">{theme.desc}</div>
+                  {formData.theme === theme.key && (
+                    <div className="theme-card__badge">✓ Selected</div>
+                  )}
+                </button>
+              ))}
             </div>
           </div>
 

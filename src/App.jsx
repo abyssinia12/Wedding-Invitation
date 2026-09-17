@@ -8,6 +8,7 @@ import GuestList from './pages/admin/GuestList';
 import CreateGuest from './pages/admin/CreateGuest';
 import Invitations from './pages/admin/Invitations';
 import PublicInvitation from './pages/guest/PublicInvitation';
+import InvitationStylesPreview from './pages/guest/InvitationStylesPreview';
 import AdminSidebar from './components/AdminSidebar';
 import './App.css';
 
@@ -78,6 +79,10 @@ function App() {
 
         {/* Public Guest Personalized Invitation Route */}
         <Route path="/invite/:token" element={<PublicInvitation />} />
+
+        {/* Invitation Styles Preview Route (first, second, thered) */}
+        <Route path="/invitation-styles" element={<InvitationStylesPreview />} />
+        <Route path="/invite-preview" element={<InvitationStylesPreview />} />
 
         {/* Default Redirects */}
         <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />

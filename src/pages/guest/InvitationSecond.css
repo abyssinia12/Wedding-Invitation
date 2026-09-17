@@ -1,0 +1,467 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&family=Dancing+Script:wght@400;700&display=swap');
+
+/* ── Page ── */
+.f2-page {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #0d2118 0%, #142b1f 35%, #1a3828 65%, #0d2118 100%);
+  font-family: 'Lato', sans-serif;
+  color: #e8d5b0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Bokeh background ── */
+.f2-bokeh {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.f2-bokeh-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(188, 143, 96, 0.12) 0%, transparent 70%);
+  animation: f2Breathe ease-in-out infinite;
+}
+
+.f2-bc-1 { width: 300px; height: 300px; top: -60px; left: -80px; animation-duration: 8s; }
+.f2-bc-2 { width: 200px; height: 200px; top: 30%; right: -50px; animation-duration: 10s; animation-delay: 2s; }
+.f2-bc-3 { width: 250px; height: 250px; top: 60%; left: 10%; animation-duration: 9s; animation-delay: 4s; }
+.f2-bc-4 { width: 180px; height: 180px; bottom: 20%; right: 5%; animation-duration: 11s; animation-delay: 1s; }
+.f2-bc-5 { width: 350px; height: 350px; bottom: -80px; left: 30%; animation-duration: 13s; animation-delay: 3s; }
+.f2-bc-6 { width: 150px; height: 150px; top: 15%; left: 50%; animation-duration: 7s; animation-delay: 5s; }
+
+@keyframes f2Breathe {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+/* ── Wrapper ── */
+.f2-wrapper {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 1rem 4rem;
+  position: relative;
+  z-index: 1;
+  animation: f2SlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes f2SlideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Banner ── */
+.f2-banner {
+  text-align: center;
+  padding: 2.5rem 1rem 0.5rem;
+  border-bottom: 1px solid rgba(188, 143, 96, 0.15);
+  margin-bottom: 2rem;
+}
+
+.f2-banner-leaves {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5rem;
+  opacity: 0.8;
+}
+
+.f2-banner-sub {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.3rem;
+  color: #bc8f60;
+  margin: 0;
+}
+
+/* ── Hero ── */
+.f2-hero {
+  text-align: center;
+  padding: 1rem 1rem 2rem;
+}
+
+.f2-hero-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(188, 143, 96, 0.7);
+  margin: 0 0 1.25rem;
+}
+
+.f2-couple-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #e8d5b0;
+  line-height: 1.15;
+  margin: 0 0 0.75rem;
+}
+
+.f2-ampersand {
+  font-family: 'Dancing Script', cursive;
+  color: #bc8f60;
+  font-size: 2.6rem;
+}
+
+.f2-hero-sub {
+  font-size: 0.85rem;
+  color: rgba(232, 213, 176, 0.65);
+  letter-spacing: 0.1em;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ── Photo ── */
+.f2-photo-wrap {
+  margin: 0 0.5rem 2rem;
+}
+
+.f2-photo-inner {
+  position: relative;
+  border-radius: 1.5rem;
+  overflow: visible;
+  aspect-ratio: 3 / 4;
+}
+
+.f2-photo-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1.25rem;
+  border: 2px solid rgba(188, 143, 96, 0.4);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 8px rgba(13, 33, 24, 1),
+    0 0 0 10px rgba(188, 143, 96, 0.2);
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.f2-photo-inner:hover img { transform: scale(1.02); }
+
+.f2-photo-leaves { position: absolute; inset: -12px; pointer-events: none; }
+
+.f2-corner-leaf {
+  position: absolute;
+  font-size: 1.4rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.f2-corner-leaf.tl { top: 0; left: 0; transform: rotate(135deg); }
+.f2-corner-leaf.tr { top: 0; right: 0; transform: rotate(225deg); }
+.f2-corner-leaf.bl { bottom: 0; left: 0; transform: rotate(45deg); }
+.f2-corner-leaf.br { bottom: 0; right: 0; transform: rotate(315deg); }
+
+/* ── Leaf Divider ── */
+.f2-leaf-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0.5rem 2rem;
+}
+
+.f2-leaf-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(188, 143, 96, 0.4), transparent);
+}
+
+.f2-leaf-icon {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* ── Section Eyebrow ── */
+.f2-section-eyebrow {
+  font-size: 0.62rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #bc8f60;
+  text-align: center;
+  margin: 0 0 1rem;
+}
+
+/* ── Guest Section ── */
+.f2-guest-section {
+  text-align: center;
+  padding: 0 0.5rem 2rem;
+}
+
+.f2-guest-name-wrap {
+  margin-bottom: 1.5rem;
+}
+
+.f2-guest-name-badge {
+  display: inline-block;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-style: italic;
+  color: #e8d5b0;
+  padding: 0.75rem 2rem;
+  border: 1px solid rgba(188, 143, 96, 0.35);
+  border-radius: 0.75rem;
+  background: rgba(188, 143, 96, 0.06);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.f2-guest-message {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: rgba(232, 213, 176, 0.85);
+  line-height: 1.7;
+  margin: 0 0 1rem;
+}
+
+.f2-guest-sub {
+  font-size: 0.85rem;
+  color: rgba(232, 213, 176, 0.55);
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ── Countdown Section ── */
+.f2-countdown-section {
+  padding: 0 0.5rem 2rem;
+}
+
+.f2-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+}
+
+.f2-cd-box {
+  background: rgba(188, 143, 96, 0.07);
+  border: 1px solid rgba(188, 143, 96, 0.2);
+  border-radius: 0.875rem;
+  padding: 1rem 0.5rem;
+  text-align: center;
+  transition: background 0.3s ease;
+}
+
+.f2-cd-box:hover { background: rgba(188, 143, 96, 0.12); }
+
+.f2-cd-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #e8d5b0;
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.f2-cd-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #bc8f60;
+}
+
+/* ── Calendar ── */
+.f2-cal-section {
+  padding: 0 0.5rem 2rem;
+  text-align: center;
+}
+
+.f2-cal-month-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: #e8d5b0;
+  font-weight: 400;
+  margin: 0 0 1.25rem;
+}
+
+.f2-calendar { width: 100%; }
+
+.f2-cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 0.5rem;
+}
+
+.f2-cal-wd {
+  text-align: center;
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  color: rgba(188, 143, 96, 0.6);
+  padding: 0.25rem 0;
+}
+
+.f2-cal-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.f2-cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  color: rgba(232, 213, 176, 0.8);
+  border-radius: 50%;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.f2-cal-day.empty { opacity: 0.2; }
+
+.f2-cal-day.f2-wedding-day {
+  background: #bc8f60;
+  color: #0d2118;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  box-shadow: 0 0 15px rgba(188, 143, 96, 0.5);
+}
+
+.f2-day-dot {
+  position: absolute;
+  bottom: 2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #0d2118;
+}
+
+/* ── Venue ── */
+.f2-venue-section {
+  padding: 0 0.5rem 2rem;
+  text-align: center;
+}
+
+.f2-venue-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  color: #e8d5b0;
+  margin: 0 0 0.5rem;
+  font-weight: 400;
+}
+
+.f2-venue-address {
+  font-size: 0.85rem;
+  color: rgba(232, 213, 176, 0.6);
+  margin: 0 0 1.5rem;
+}
+
+.f2-event-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid rgba(188, 143, 96, 0.2);
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+  background: rgba(188, 143, 96, 0.04);
+}
+
+.f2-event-item {
+  flex: 1;
+  padding: 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.f2-event-divider {
+  width: 1px;
+  background: rgba(188, 143, 96, 0.2);
+}
+
+.f2-event-icon { font-size: 1.1rem; }
+
+.f2-event-title {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(188, 143, 96, 0.7);
+}
+
+.f2-event-time {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  color: #e8d5b0;
+  font-weight: 700;
+}
+
+.f2-map-btn {
+  display: inline-block;
+  padding: 0.7rem 2rem;
+  border: 1px solid rgba(188, 143, 96, 0.5);
+  border-radius: 9999px;
+  color: #bc8f60;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  background: transparent;
+}
+
+.f2-map-btn:hover {
+  background: rgba(188, 143, 96, 0.15);
+  border-color: #bc8f60;
+  transform: translateY(-1px);
+}
+
+/* ── QR Section ── */
+.f2-qr-section {
+  padding: 0 0.5rem 2rem;
+  text-align: center;
+}
+
+.f2-qr-frame {
+  display: inline-flex;
+  padding: 1.25rem;
+  background: #e8d5b0;
+  border-radius: 1rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  margin-bottom: 1rem;
+}
+
+.f2-qr-desc {
+  font-size: 0.85rem;
+  color: rgba(232, 213, 176, 0.6);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.f2-qr-desc strong { color: #e8d5b0; }
+
+/* ── Footer ── */
+.f2-footer {
+  text-align: center;
+  padding: 2rem 1rem 2rem;
+  border-top: 1px solid rgba(188, 143, 96, 0.15);
+}
+
+.f2-footer-leaves {
+  font-size: 1.2rem;
+  letter-spacing: 0.4rem;
+  opacity: 0.7;
+  margin-bottom: 1rem;
+}
+
+.f2-footer-names {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.2rem;
+  color: #bc8f60;
+  margin: 0 0 0.4rem;
+}
+
+.f2-footer-date {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: rgba(232, 213, 176, 0.5);
+  margin: 0 0 0.5rem;
+}
+
+.f2-footer-tag {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.1rem;
+  color: rgba(188, 143, 96, 0.6);
+  margin: 0;
+}

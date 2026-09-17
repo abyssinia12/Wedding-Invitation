@@ -1,75 +1,73 @@
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap');
 
-/* ──────────────────────────────────────────
-   Root / Page
-────────────────────────────────────────── */
-.pi-page {
+/* ── Root / Page ── */
+.f1-page {
   min-height: 100vh;
   background: radial-gradient(ellipse at 50% 0%, #8b0000 0%, #5a0000 40%, #3d0000 70%, #2a0000 100%);
   font-family: 'Cormorant Garamond', Georgia, serif;
   color: #f5e6c8;
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
 }
 
-/* ──────────────────────────────────────────
-   Loading / Error States
-────────────────────────────────────────── */
-.pi-loading,
-.pi-error {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 1.5rem;
-  background: radial-gradient(ellipse at 50% 0%, #8b0000 0%, #3d0000 70%, #2a0000 100%);
-  color: #c9a84c;
-  font-family: 'Cinzel', serif;
-  letter-spacing: 0.15em;
-  font-size: 0.875rem;
+/* ── Floating ornaments ── */
+.f1-petals {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
 }
 
-.pi-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(201, 168, 76, 0.2);
-  border-top-color: #c9a84c;
-  border-radius: 50%;
-  animation: piSpin 0.9s linear infinite;
+.f1-petal {
+  position: absolute;
+  color: rgba(201, 168, 76, 0.15);
+  font-size: 1rem;
+  animation: f1Float linear infinite;
 }
 
-@keyframes piSpin {
-  to { transform: rotate(360deg); }
+.f1-petal-1 { left: 8%; animation-duration: 14s; animation-delay: 0s; font-size: 0.8rem; }
+.f1-petal-2 { left: 22%; animation-duration: 18s; animation-delay: 2s; }
+.f1-petal-3 { left: 40%; animation-duration: 12s; animation-delay: 4s; font-size: 1.2rem; }
+.f1-petal-4 { left: 58%; animation-duration: 16s; animation-delay: 1s; }
+.f1-petal-5 { left: 72%; animation-duration: 20s; animation-delay: 3s; font-size: 0.7rem; }
+.f1-petal-6 { left: 85%; animation-duration: 13s; animation-delay: 5s; }
+.f1-petal-7 { left: 15%; animation-duration: 17s; animation-delay: 7s; font-size: 1.1rem; }
+.f1-petal-8 { left: 92%; animation-duration: 15s; animation-delay: 6s; font-size: 0.9rem; }
+
+@keyframes f1Float {
+  0%   { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
 }
 
-/* ──────────────────────────────────────────
-   Wrapper (single-column centered)
-────────────────────────────────────────── */
-.pi-wrapper {
+/* ── Wrapper ── */
+.f1-wrapper {
   max-width: 480px;
   margin: 0 auto;
   padding: 2.5rem 1rem 4rem;
   display: flex;
   flex-direction: column;
   gap: 0;
-  animation: piFadeUp 0.7s ease-out both;
+  position: relative;
+  z-index: 1;
+  animation: f1FadeUp 0.7s ease-out both;
 }
 
-@keyframes piFadeUp {
+@keyframes f1FadeUp {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ──────────────────────────────────────────
-   Section 1 - Hero Header
-────────────────────────────────────────── */
-.pi-hero-header {
+/* ── Hero Header ── */
+.f1-hero-header {
   text-align: center;
   padding: 2rem 1.5rem 1.5rem;
 }
 
-.pi-tagline {
+.f1-tagline {
   font-family: 'Cinzel', serif;
   font-size: 0.65rem;
   letter-spacing: 0.35em;
@@ -78,24 +76,31 @@
   margin: 0 0 1rem 0;
 }
 
-.pi-couple-name {
+.f1-couple-name {
   font-family: 'Great Vibes', cursive;
   font-size: 3.4rem;
   color: #d4a843;
   margin: 0;
   line-height: 1.1;
   font-weight: 400;
+  text-shadow: 0 0 30px rgba(212, 168, 67, 0.4);
 }
 
-.pi-diamond {
+.f1-diamond {
   color: #c9a84c;
   font-size: 1.1rem;
   margin: 0.75rem 0;
   display: block;
   text-align: center;
+  animation: f1Pulse 2s ease-in-out infinite;
 }
 
-.pi-invite-sub {
+@keyframes f1Pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+.f1-invite-sub {
   font-family: 'Cinzel', serif;
   font-size: 0.65rem;
   letter-spacing: 0.3em;
@@ -104,20 +109,16 @@
   margin: 0;
 }
 
-/* ──────────────────────────────────────────
-   Section 2 - Couple Photo
-────────────────────────────────────────── */
-.pi-photo-frame {
+/* ── Photo Frame ── */
+.f1-photo-frame {
   position: relative;
   margin: 1.5rem 1rem 2.5rem;
   border-radius: 1rem;
-  /* Layered border: outer gold ring + gap + inner gold ring */
   border: 3px solid rgba(201, 168, 76, 0.85);
   outline: 6px solid rgba(201, 168, 76, 0.18);
   outline-offset: 4px;
   overflow: hidden;
   background: #1a0000;
-  /* Warm multi-layer glow */
   box-shadow:
     0 0 0 9px rgba(201, 168, 76, 0.07),
     0 12px 48px rgba(0, 0, 0, 0.75),
@@ -126,23 +127,17 @@
   aspect-ratio: 3 / 4;
 }
 
-/* Inner vignette overlay */
-.pi-photo-frame::after {
+.f1-photo-frame::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 55%,
-    rgba(0, 0, 0, 0.45) 100%
-  );
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
   pointer-events: none;
   z-index: 1;
 }
 
-/* Corner ornament – top-left & bottom-right */
-.pi-photo-frame::before {
+.f1-photo-frame::before {
   content: '✦';
   position: absolute;
   top: 8px;
@@ -154,7 +149,7 @@
   text-shadow: 0 0 8px rgba(201, 168, 76, 0.9);
 }
 
-.pi-photo-frame img {
+.f1-photo-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -163,14 +158,10 @@
   transition: transform 0.4s ease;
 }
 
-.pi-photo-frame:hover img {
-  transform: scale(1.03);
-}
+.f1-photo-frame:hover img { transform: scale(1.03); }
 
-/* ──────────────────────────────────────────
-   Section 3 - Guest Card
-────────────────────────────────────────── */
-.pi-guest-card {
+/* ── Guest Card ── */
+.f1-guest-card {
   margin: 0 0.25rem 1.75rem;
   border: 1px solid rgba(201, 168, 76, 0.25);
   border-radius: 0.875rem;
@@ -179,7 +170,7 @@
   text-align: center;
 }
 
-.pi-reserved-label {
+.f1-reserved-label {
   font-family: 'Cinzel', serif;
   font-size: 0.6rem;
   letter-spacing: 0.35em;
@@ -188,7 +179,7 @@
   margin: 0 0 0.75rem;
 }
 
-.pi-honoured-guest {
+.f1-honoured-guest {
   font-family: 'Great Vibes', cursive;
   font-size: 2.4rem;
   color: #d4a843;
@@ -197,7 +188,7 @@
   line-height: 1.15;
 }
 
-.pi-guest-name {
+.f1-guest-name {
   font-family: 'Cinzel', serif;
   font-size: 1.6rem;
   font-weight: 700;
@@ -209,14 +200,14 @@
   text-shadow: 0 2px 10px rgba(201, 168, 76, 0.45);
 }
 
-.pi-guest-divider {
+.f1-guest-divider {
   width: 60px;
   height: 1px;
   background: linear-gradient(to right, transparent, #c9a84c, transparent);
   margin: 0 auto 1.25rem;
 }
 
-.pi-quote {
+.f1-quote {
   font-size: 1.1rem;
   font-style: italic;
   color: #f0dba8;
@@ -225,7 +216,7 @@
   font-weight: 400;
 }
 
-.pi-subtext {
+.f1-subtext {
   font-family: 'Cormorant Garamond', serif;
   font-size: 0.9rem;
   color: rgba(245, 230, 200, 0.7);
@@ -233,17 +224,15 @@
   margin: 0;
 }
 
-/* ──────────────────────────────────────────
-   Section 4 - Countdown
-────────────────────────────────────────── */
-.pi-countdown {
+/* ── Countdown ── */
+.f1-countdown {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.625rem;
   margin: 0 0.25rem 1.75rem;
 }
 
-.pi-countdown-box {
+.f1-countdown-box {
   border: 1px solid rgba(201, 168, 76, 0.2);
   border-radius: 0.75rem;
   padding: 0.875rem 0.5rem;
@@ -251,7 +240,7 @@
   background: rgba(0,0,0,0.18);
 }
 
-.pi-countdown-num {
+.f1-countdown-num {
   font-family: 'Cinzel', serif;
   font-size: 1.65rem;
   font-weight: 600;
@@ -261,7 +250,7 @@
   margin-bottom: 0.35rem;
 }
 
-.pi-countdown-label {
+.f1-countdown-label {
   font-family: 'Cinzel', serif;
   font-size: 0.55rem;
   letter-spacing: 0.2em;
@@ -269,10 +258,8 @@
   color: #c9a84c;
 }
 
-/* ──────────────────────────────────────────
-   Section 5 - Calendar
-────────────────────────────────────────── */
-.pi-calendar-wrap {
+/* ── Calendar ── */
+.f1-calendar-wrap {
   margin: 0 0.25rem 1.75rem;
   border: 1px solid rgba(201, 168, 76, 0.25);
   border-radius: 0.875rem;
@@ -280,7 +267,7 @@
   background: rgba(0,0,0,0.18);
 }
 
-.pi-save-label {
+.f1-save-label {
   font-family: 'Cinzel', serif;
   font-size: 0.6rem;
   letter-spacing: 0.35em;
@@ -290,7 +277,7 @@
   margin: 0 0 0.35rem;
 }
 
-.pi-cal-month {
+.f1-cal-month {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.6rem;
   font-weight: 300;
@@ -299,7 +286,7 @@
   margin: 0 0 0.6rem;
 }
 
-.pi-cal-divider {
+.f1-cal-divider {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -307,30 +294,24 @@
   margin-bottom: 1.25rem;
 }
 
-.pi-cal-divider::before,
-.pi-cal-divider::after {
+.f1-cal-divider::before, .f1-cal-divider::after {
   content: '';
   flex: 1;
   height: 1px;
   background: rgba(201, 168, 76, 0.5);
 }
 
-.pi-cal-divider-diamond {
-  color: #c9a84c;
-  font-size: 0.8rem;
-}
+.f1-cal-divider-diamond { color: #c9a84c; font-size: 0.8rem; }
 
-.pi-calendar {
-  width: 100%;
-}
+.f1-calendar { width: 100%; }
 
-.pi-cal-weekdays {
+.f1-cal-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   margin-bottom: 0.4rem;
 }
 
-.pi-cal-wd {
+.f1-cal-wd {
   text-align: center;
   font-family: 'Cinzel', serif;
   font-size: 0.6rem;
@@ -339,13 +320,13 @@
   padding: 0.25rem 0;
 }
 
-.pi-cal-days {
+.f1-cal-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 2px;
 }
 
-.pi-cal-day {
+.f1-cal-day {
   aspect-ratio: 1;
   display: flex;
   align-items: center;
@@ -354,14 +335,11 @@
   font-size: 0.875rem;
   color: rgba(245, 230, 200, 0.85);
   border-radius: 50%;
-  cursor: default;
 }
 
-.pi-cal-day.empty {
-  color: rgba(245, 230, 200, 0.2);
-}
+.f1-cal-day.empty { color: rgba(245, 230, 200, 0.2); }
 
-.pi-cal-day.wedding-day {
+.f1-cal-day.wedding-day {
   background: #c9a84c;
   color: #3d0000;
   font-weight: 700;
@@ -370,7 +348,7 @@
   gap: 0;
 }
 
-.pi-cal-day.wedding-day::after {
+.f1-cal-day.wedding-day::after {
   content: '\2666';
   font-size: 0.35rem;
   position: absolute;
@@ -378,10 +356,8 @@
   color: #3d0000;
 }
 
-/* ──────────────────────────────────────────
-   Section 6 - Venue
-────────────────────────────────────────── */
-.pi-venue-card {
+/* ── Venue ── */
+.f1-venue-card {
   margin: 0 0.25rem 1.75rem;
   border: 1px solid rgba(201, 168, 76, 0.25);
   border-radius: 0.875rem;
@@ -390,7 +366,7 @@
   text-align: center;
 }
 
-.pi-venue-label {
+.f1-venue-label {
   font-family: 'Cinzel', serif;
   font-size: 0.6rem;
   letter-spacing: 0.35em;
@@ -399,7 +375,7 @@
   margin: 0 0 0.5rem;
 }
 
-.pi-venue-name {
+.f1-venue-name {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.6rem;
   font-weight: 600;
@@ -408,13 +384,13 @@
   line-height: 1.2;
 }
 
-.pi-venue-address {
+.f1-venue-address {
   font-size: 0.875rem;
   color: rgba(245, 230, 200, 0.7);
   margin: 0 0 1.25rem;
 }
 
-.pi-venue-divider {
+.f1-venue-divider {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -422,27 +398,23 @@
   margin: 0 0 1.25rem;
 }
 
-.pi-venue-divider::before,
-.pi-venue-divider::after {
+.f1-venue-divider::before, .f1-venue-divider::after {
   content: '';
   flex: 1;
   height: 1px;
   background: rgba(201, 168, 76, 0.4);
 }
 
-.pi-venue-divider span {
-  color: #c9a84c;
-  font-size: 0.8rem;
-}
+.f1-venue-divider span { color: #c9a84c; font-size: 0.8rem; }
 
-.pi-event-pills {
+.f1-event-pills {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.625rem;
   margin-bottom: 1.25rem;
 }
 
-.pi-event-pill {
+.f1-event-pill {
   border: 1px solid rgba(201, 168, 76, 0.2);
   border-radius: 0.625rem;
   padding: 0.875rem 0.5rem;
@@ -450,7 +422,7 @@
   background: rgba(0,0,0,0.15);
 }
 
-.pi-pill-label {
+.f1-pill-label {
   font-family: 'Cinzel', serif;
   font-size: 0.55rem;
   letter-spacing: 0.2em;
@@ -460,7 +432,7 @@
   margin-bottom: 0.3rem;
 }
 
-.pi-pill-value {
+.f1-pill-value {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1rem;
   font-weight: 600;
@@ -469,7 +441,7 @@
   line-height: 1.2;
 }
 
-.pi-map-btn {
+.f1-map-btn {
   display: inline-block;
   background: rgba(201, 168, 76, 0.08);
   border: 1px solid #c9a84c;
@@ -485,15 +457,10 @@
   transition: all 0.25s ease;
 }
 
-.pi-map-btn:hover {
-  background: #c9a84c;
-  color: #3d0000;
-}
+.f1-map-btn:hover { background: #c9a84c; color: #3d0000; }
 
-/* ──────────────────────────────────────────
-   Section 7 - QR Entry Pass
-────────────────────────────────────────── */
-.pi-qr-card {
+/* ── QR ── */
+.f1-qr-card {
   margin: 0 0.25rem 1.75rem;
   border: 1px solid rgba(201, 168, 76, 0.25);
   border-radius: 0.875rem;
@@ -502,7 +469,7 @@
   text-align: center;
 }
 
-.pi-qr-label {
+.f1-qr-label {
   font-family: 'Cinzel', serif;
   font-size: 0.6rem;
   letter-spacing: 0.35em;
@@ -511,7 +478,7 @@
   margin: 0 0 0.5rem;
 }
 
-.pi-qr-title {
+.f1-qr-title {
   font-family: 'Great Vibes', cursive;
   font-size: 2rem;
   color: #d4a843;
@@ -519,7 +486,7 @@
   margin: 0 0 1.25rem;
 }
 
-.pi-qr-box {
+.f1-qr-box {
   background: #fff8ed;
   display: inline-flex;
   padding: 1rem;
@@ -528,22 +495,20 @@
   margin-bottom: 1rem;
 }
 
-.pi-qr-note {
+.f1-qr-note {
   font-size: 0.85rem;
   color: rgba(245, 230, 200, 0.65);
   line-height: 1.6;
   margin: 0;
 }
 
-/* ──────────────────────────────────────────
-   Section 8 - Footer Signature
-────────────────────────────────────────── */
-.pi-footer-sig {
+/* ── Footer ── */
+.f1-footer-sig {
   text-align: center;
   padding: 1.5rem 1rem 2rem;
 }
 
-.pi-footer-divider {
+.f1-footer-divider {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -551,20 +516,16 @@
   margin-bottom: 0.75rem;
 }
 
-.pi-footer-divider::before,
-.pi-footer-divider::after {
+.f1-footer-divider::before, .f1-footer-divider::after {
   content: '';
   flex: 1;
   height: 1px;
   background: rgba(201, 168, 76, 0.35);
 }
 
-.pi-footer-divider span {
-  color: #c9a84c;
-  font-size: 0.8rem;
-}
+.f1-footer-divider span { color: #c9a84c; font-size: 0.8rem; }
 
-.pi-footer-names {
+.f1-footer-names {
   font-family: 'Great Vibes', cursive;
   font-size: 2rem;
   color: #d4a843;
@@ -572,7 +533,7 @@
   font-weight: 400;
 }
 
-.pi-footer-date {
+.f1-footer-date {
   font-family: 'Cinzel', serif;
   font-size: 0.65rem;
   letter-spacing: 0.4em;
