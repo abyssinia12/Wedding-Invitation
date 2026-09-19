@@ -97,6 +97,10 @@ export default function InvitationFirst({ invite, wedding, guest }) {
   const defaultSubtext =
     "We would be honoured to have you share in our joy as we exchange vows and begin our life together, surrounded by the people we love most.";
 
+  const bannerImage =
+    wedding.image_url ||
+    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80";
+
   return (
     <div className="f1-page">
       <div className="f1-wrapper">
@@ -108,25 +112,24 @@ export default function InvitationFirst({ invite, wedding, guest }) {
           ))}
         </div>
 
-        {/* ── 1. Hero Header ── */}
-        <div className="f1-hero-header">
-          <p className="f1-tagline">Together with their families</p>
-          <h1 className="f1-couple-name">
-            {wedding.bride_name} & {wedding.groom_name}
-          </h1>
-          <span className="f1-diamond">✦</span>
-          <p className="f1-invite-sub">Invite you to their wedding</p>
-        </div>
-
-        {/* ── 2. Couple Photo ── */}
-        <div className="f1-photo-frame">
+        {/* ── 1. Image banner (groom & bride at bottom) ── */}
+        <div className="f1-image-banner">
           <img
-            src={
-              wedding.image_url ||
-              "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80"
-            }
+            src={bannerImage}
             alt={`${wedding.bride_name} & ${wedding.groom_name}`}
           />
+          <div className="f1-image-banner-overlay">
+            <div className="f1-image-banner-top">
+              <p className="f1-tagline">Together with their families</p>
+              <span className="f1-diamond">✦</span>
+              <p className="f1-invite-sub">Invite you to their wedding</p>
+            </div>
+            <div className="f1-image-banner-bottom">
+              <h1 className="f1-couple-name">
+                {wedding.bride_name} & {wedding.groom_name}
+              </h1>
+            </div>
+          </div>
         </div>
 
         {/* ── 3. Honoured Guest Card ── */}

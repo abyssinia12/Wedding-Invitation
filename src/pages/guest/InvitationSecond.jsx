@@ -100,6 +100,10 @@ export default function InvitationSecond({ invite, wedding, guest }) {
   const defaultMessage =
     "In the garden of life, love is the most beautiful flower. We invite you to witness ours bloom.";
 
+  const bannerImage =
+    wedding.image_url ||
+    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80";
+
   return (
     <div className="f2-page">
 
@@ -112,39 +116,24 @@ export default function InvitationSecond({ invite, wedding, guest }) {
 
       <div className="f2-wrapper">
 
-        {/* ── Top botanical banner ── */}
-        <div className="f2-banner">
-          {/* <div className="f2-banner-leaves" aria-hidden="true">🌿 🌸 🌿</div> */}
-          <p className="f2-banner-sub">A Celebration of Love</p>
-        </div>
-
-        {/* ── Hero ── */}
-        <div className="f2-hero">
-          <p className="f2-hero-eyebrow">Together with joy & love</p>
-          <h1 className="f2-couple-name">
-            {wedding.bride_name}
-            <span className="f2-ampersand"> & </span>
-            {wedding.groom_name}
-          </h1>
-          {/* <p className="f2-hero-sub">cordially invite you to celebrate their union</p> */}
-        </div>
-
-        {/* ── Photo ── */}
-        <div className="f2-photo-wrap">
-          <div className="f2-photo-inner">
-            <img
-              src={
-                wedding.image_url ||
-                "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80"
-              }
-              alt={`${wedding.bride_name} & ${wedding.groom_name}`}
-            />
-            {/* <div className="f2-photo-leaves" aria-hidden="true">
-              <span className="f2-corner-leaf tl">🌿</span>
-              <span className="f2-corner-leaf tr">🌿</span>
-              <span className="f2-corner-leaf bl">🌿</span>
-              <span className="f2-corner-leaf br">🌿</span>
-            </div> */}
+        {/* ── Image banner (groom & bride at bottom) ── */}
+        <div className="f2-image-banner">
+          <img
+            src={bannerImage}
+            alt={`${wedding.bride_name} & ${wedding.groom_name}`}
+          />
+          <div className="f2-image-banner-overlay">
+            <div className="f2-image-banner-top">
+              <p className="f2-banner-sub">A Celebration of Love</p>
+              <p className="f2-hero-eyebrow">Together with joy & love</p>
+            </div>
+            <div className="f2-image-banner-bottom">
+              <h1 className="f2-couple-name">
+                {wedding.bride_name}
+                <span className="f2-ampersand"> & </span>
+                {wedding.groom_name}
+              </h1>
+            </div>
           </div>
         </div>
 

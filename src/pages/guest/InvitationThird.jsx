@@ -88,8 +88,36 @@ export default function InvitationThird({ invite, wedding, guest }) {
   const defaultMessage =
     "True love stories never have endings. Together with their cherished families, they request the honour of your presence.";
 
+  const bannerImage =
+    wedding.image_url ||
+    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80";
+
   return (
     <div className="f3-page">
+      {/* Full-screen image banner */}
+      <div className="f3-image-banner">
+        <img
+          src={bannerImage}
+          alt={`${wedding.bride_name} & ${wedding.groom_name}`}
+          className="f3-image-banner-img"
+        />
+        <div className="f3-image-banner-overlay">
+          <div className="f3-image-banner-top">
+            <span className="f3-monogram f3-monogram--banner">
+              {wedding.bride_name?.[0] || "B"} & {wedding.groom_name?.[0] || "G"}
+            </span>
+            <p className="f3-eyebrow f3-eyebrow--banner">The Wedding Celebration of</p>
+          </div>
+          <div className="f3-image-banner-bottom">
+            <h1 className="f3-names">
+              {wedding.bride_name}
+              <span className="f3-and">&</span>
+              {wedding.groom_name}
+            </h1>
+          </div>
+        </div>
+      </div>
+
       <div className="f3-card-container">
         {/* Upper Corner Wedding Flowers */}
         {/* <div className="f3-corner-flower f3-corner-top-left" aria-hidden="true">
@@ -150,36 +178,6 @@ export default function InvitationThird({ invite, wedding, guest }) {
 
         {/* Subtle decorative inner border */}
         <div className="f3-inner-border">
-          {/* Header */}
-          <div className="f3-header">
-            <span className="f3-monogram">
-              {wedding.bride_name?.[0] || "B"} & {wedding.groom_name?.[0] || "G"}
-            </span>
-            <p className="f3-eyebrow">The Wedding Celebration of</p>
-            <h1 className="f3-names">
-              {wedding.bride_name}
-              <span className="f3-and">&</span>
-              {wedding.groom_name}
-            </h1>
-            <div className="f3-separator">
-              <span className="f3-sep-line"></span>
-              <span className="f3-sep-gem">✧</span>
-              <span className="f3-sep-line"></span>
-            </div>
-          </div>
-
-          {/* Photo */}
-          <div className="f3-photo-container">
-            <img
-              src={
-                wedding.image_url ||
-                "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80"
-              }
-              alt={`${wedding.bride_name} & ${wedding.groom_name}`}
-              className="f3-photo"
-            />
-          </div>
-
           {/* Guest Greeting */}
           <div className="f3-guest-box">
             <span className="f3-guest-tag">Cordially Invited</span>
