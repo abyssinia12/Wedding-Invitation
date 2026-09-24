@@ -140,7 +140,17 @@ export default function InvitationFirst({ invite, wedding, guest }) {
             <p className="f1-guest-name">{guest.full_name}</p>
           )}
           <div className="f1-guest-divider" />
-          <p className="f1-quote">{wedding.message || defaultMessage}</p>
+          <p className="f1-quote">
+            {wedding.message || defaultMessage}
+          </p>
+          {/* Image Slideshow */}
+          {wedding.extra_images && wedding.extra_images.length > 0 && (
+            <div className="f1-image-slideshow" style={{ display: "flex", overflowX: "auto", gap: "0.5rem", marginTop: "1rem" }}>
+              {wedding.extra_images.map((url, idx) => (
+                <img key={idx} src={url} alt={`Extra ${idx + 1}`} style={{ maxHeight: "200px", borderRadius: "0.5rem" }} />
+              ))}
+            </div>
+          )}
           <p className="f1-subtext">{defaultSubtext}</p>
         </div>
 

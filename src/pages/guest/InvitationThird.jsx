@@ -183,6 +183,14 @@ export default function InvitationThird({ invite, wedding, guest }) {
             <span className="f3-guest-tag">Cordially Invited</span>
             <h2 className="f3-guest-name">{guest?.full_name || "Honoured Guest"}</h2>
             <p className="f3-invitation-message">{wedding.message || defaultMessage}</p>
+            {/* Image Slideshow */}
+            {wedding.extra_images && wedding.extra_images.length > 0 && (
+              <div className="f3-image-slideshow" style={{ display: "flex", overflowX: "auto", gap: "0.5rem", marginTop: "1rem" }}>
+                {wedding.extra_images.map((url, idx) => (
+                  <img key={idx} src={url} alt={`Extra ${idx + 1}`} style={{ maxHeight: "200px", borderRadius: "0.5rem" }} />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Countdown */}

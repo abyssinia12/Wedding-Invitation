@@ -148,6 +148,14 @@ export default function InvitationSecond({ invite, wedding, guest }) {
             </div>
           </div>
           <p className="f2-guest-message">{wedding.message || defaultMessage}</p>
+          {/* Image Slideshow */}
+          {wedding.extra_images && wedding.extra_images.length > 0 && (
+            <div className="f2-image-slideshow" style={{ display: "flex", overflowX: "auto", gap: "0.5rem", marginTop: "1rem" }}>
+              {wedding.extra_images.map((url, idx) => (
+                <img key={idx} src={url} alt={`Extra ${idx + 1}`} style={{ maxHeight: "200px", borderRadius: "0.5rem" }} />
+              ))}
+            </div>
+          )}
           <p className="f2-guest-sub">
             Your presence is our greatest gift. We look forward to celebrating this joyous occasion with you, surrounded by the warmth of family and the beauty of love.
           </p>

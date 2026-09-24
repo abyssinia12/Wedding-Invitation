@@ -20,6 +20,10 @@ export default function CreateWedding() {
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
   const fileInputRef = useRef(null);
+  // Ref for additional images upload
+  const extraFileInputRef = useRef(null);
+  // State to hold URLs of extra uploaded images
+  const [extraImages, setExtraImages] = useState([]);
 
   const [formData, setFormData] = useState({
     groom_name: "",
@@ -33,7 +37,9 @@ export default function CreateWedding() {
     message: "",
     image_url: PRESET_IMAGES[0],
     status: "draft",
-    theme: "first"
+    theme: "first",
+    // New field to hold extra image URLs
+    extra_images: [],
   });
 
   useEffect(() => {
@@ -114,6 +120,49 @@ export default function CreateWedding() {
     }
   };
 
+  // Upload multiple additional images
+  const handleMultipleImageUpload = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const uploadedUrls = [];
+    setUploadError(null);
+    setUploading(true);
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type.startsWith('image/')) {
+          setUploadError(`File "${file.name}" is not a valid image.`);
+          continue;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          setUploadError(`File "${file.name}" exceeds 5MB size limit.`);
+          continue;
+        }
+        const fileExt = file.name.split('.').pop();
+        const fileName = `wedding-extra-${Date.now()}-${i}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+        const filePath = `banners/${fileName}`;
+        const { error: uploadErr } = await supabase.storage.from('wedding-images').upload(filePath, file, { upsert: false });
+        if (uploadErr) {
+          console.error('Upload error for', file.name, uploadErr);
+          setUploadError(`Failed to upload ${file.name}`);
+          continue;
+        }
+        const { data: urlData } = supabase.storage.from('wedding-images').getPublicUrl(filePath);
+        if (urlData?.publicUrl) uploadedUrls.push(urlData.publicUrl);
+      }
+      if (uploadedUrls.length > 0) {
+        setExtraImages(prev => [...prev, ...uploadedUrls]);
+      }
+    } catch (err) {
+      console.error('Multiple image upload error:', err);
+      setUploadError(err.message || 'Failed to upload images.');
+    } finally {
+      setUploading(false);
+      if (extraFileInputRef.current) extraFileInputRef.current.value = '';
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -144,6 +193,8 @@ export default function CreateWedding() {
         location_address: formData.location_address ? formData.location_address.trim() : null,
         latitude: formData.latitude ? parseFloat(formData.latitude) : null,
         longitude: formData.longitude ? parseFloat(formData.longitude) : null,
+        // New field to hold extra image URLs
+        extra_images: formData.extra_images,
         status: formData.status || "draft",
         theme: formData.theme || "first"
       };
@@ -456,6 +507,64 @@ export default function CreateWedding() {
                 onChange={handleChange}
                 rows={3}
               />
+            </div>
+            {/* Section 7: Additional Images */}
+            <div className="form-section">
+              <h2 className="form-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M12 5v14" />
+                </svg>
+                7. Additional Images
+              </h2>
+              <div className="form-field">
+                <label>Upload Additional Images</label>
+                <div className="upload-section">
+                  <input
+                    ref={extraFileInputRef}
+                    id="extra_image_file_upload"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    style={{ display: "none" }}
+                    onChange={handleMultipleImageUpload}
+                  />
+                  <button
+                    type="button"
+                    className="btn-upload"
+                    onClick={() => extraFileInputRef.current?.click()}
+                    disabled={uploading}
+                  >
+                    {uploading ? (
+                      <>
+                        <div className="spinner" style={{ width: 16, height: 16 }} />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                        Upload More Images
+                      </>
+                    )}
+                  </button>
+                  <span className="upload-hint">JPG, PNG, WEBP · max 5 MB each</span>
+                </div>
+                {extraImages.map((url, idx) => (
+                  <div key={idx} className="image-preview-wrap" style={{ position: "relative", display: "inline-block", margin: "4px" }}>
+                    <img src={url} alt={`Extra ${idx + 1}`} className="image-preview" />
+                    <button
+                      type="button"
+                      className="btn-remove-image"
+                      style={{ position: "absolute", top: 0, right: 0 }}
+                      onClick={() => setExtraImages(prev => prev.filter((_, i) => i !== idx))}
+                      title="Remove image"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
