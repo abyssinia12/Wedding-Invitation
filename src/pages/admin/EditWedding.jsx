@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import "./CreateWedding.css";
@@ -45,6 +45,10 @@ export default function EditWedding() {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
+  const extraFileInputRef = useRef(null);
+  const [extraImages, setExtraImages] = useState([]);
 
   const [formData, setFormData] = useState({
     groom_name: "",
@@ -58,7 +62,8 @@ export default function EditWedding() {
     message: "",
     image_url: PRESET_IMAGES[0],
     status: "draft",
-    theme: "classic"
+    theme: "classic",
+    extra_images: []
   });
 
   useEffect(() => {
@@ -104,6 +109,22 @@ export default function EditWedding() {
         return;
       }
 
+      // Parse extra_images
+      let loadedExtra = [];
+      if (wedding.extra_images) {
+        if (Array.isArray(wedding.extra_images)) loadedExtra = wedding.extra_images;
+        else if (typeof wedding.extra_images === "string") {
+          try { loadedExtra = JSON.parse(wedding.extra_images); } catch(e) {}
+        }
+      }
+      if (loadedExtra.length === 0) {
+        try {
+          const localExtra = localStorage.getItem(`wedding_extra_images_${id}`);
+          if (localExtra) loadedExtra = JSON.parse(localExtra);
+        } catch (e) {}
+      }
+      setExtraImages(loadedExtra);
+
       setFormData({
         groom_name: wedding.groom_name || "",
         bride_name: wedding.bride_name || "",
@@ -116,13 +137,60 @@ export default function EditWedding() {
         message: wedding.message || "",
         image_url: wedding.image_url || PRESET_IMAGES[0],
         status: wedding.status || "draft",
-        theme: wedding.theme || "classic"
+        theme: wedding.theme || "classic",
+        extra_images: loadedExtra
       });
     } catch (err) {
       console.error("Fetch wedding error:", err);
       setError("An error occurred while loading wedding details.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMultipleImageUpload = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const uploadedUrls = [];
+    setUploadError(null);
+    setUploading(true);
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type.startsWith('image/')) {
+          setUploadError(`File "${file.name}" is not a valid image.`);
+          continue;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          setUploadError(`File "${file.name}" exceeds 5MB size limit.`);
+          continue;
+        }
+        const fileExt = file.name.split('.').pop();
+        const fileName = `wedding-extra-${Date.now()}-${i}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+        const filePath = `banners/${fileName}`;
+        const { error: uploadErr } = await supabase.storage.from('wedding-images').upload(filePath, file, { upsert: false });
+        if (uploadErr) {
+          console.error('Upload error for', file.name, uploadErr);
+          setUploadError(`Failed to upload ${file.name}`);
+          continue;
+        }
+        const { data: urlData } = supabase.storage.from('wedding-images').getPublicUrl(filePath);
+        if (urlData?.publicUrl) uploadedUrls.push(urlData.publicUrl);
+      }
+      if (uploadedUrls.length > 0) {
+        setExtraImages((prev) => {
+          const updated = [...prev, ...uploadedUrls];
+          setFormData((f) => ({ ...f, extra_images: updated }));
+          return updated;
+        });
+      }
+    } catch (err) {
+      console.error('Multiple image upload error:', err);
+      setUploadError(err.message || 'Failed to upload images.');
+    } finally {
+      setUploading(false);
+      if (extraFileInputRef.current) extraFileInputRef.current.value = '';
     }
   };
 
@@ -160,6 +228,7 @@ export default function EditWedding() {
         location_address: formData.location_address ? formData.location_address.trim() : null,
         latitude: formData.latitude ? parseFloat(formData.latitude) : null,
         longitude: formData.longitude ? parseFloat(formData.longitude) : null,
+        extra_images: extraImages,
         status: formData.status || "draft",
         theme: formData.theme || "first",
         updated_at: new Date().toISOString()
@@ -171,23 +240,29 @@ export default function EditWedding() {
         .eq("id", id)
         .eq("admin_id", admin.id);
 
-      // If Supabase table doesn't have the 'theme' column yet, retry without 'theme'
-      if (updateErr && (updateErr.message?.includes("theme") || updateErr.code === "PGRST204")) {
-        const { theme: _, ...payloadWithoutTheme } = payload;
+      // If Supabase table doesn't have the 'theme' or 'extra_images' column yet, retry without them
+      if (updateErr && (updateErr.message?.includes("theme") || updateErr.message?.includes("extra_images") || updateErr.code === "PGRST204")) {
+        const fallbackPayload = { ...payload };
+        if (updateErr.message?.includes("theme")) delete fallbackPayload.theme;
+        if (updateErr.message?.includes("extra_images")) delete fallbackPayload.extra_images;
+
         const retryResult = await supabase
           .from("weddings")
-          .update(payloadWithoutTheme)
+          .update(fallbackPayload)
           .eq("id", id)
           .eq("admin_id", admin.id);
 
         updateErr = retryResult.error;
+      }
 
-        // Remember user's chosen theme for this wedding in localStorage
-        try {
-          localStorage.setItem(`wedding_theme_${id}`, formData.theme);
-        } catch (e) {
-          console.warn("Could not save theme to localStorage", e);
+      // Save extra_images & theme to localStorage
+      try {
+        if (extraImages.length > 0) {
+          localStorage.setItem(`wedding_extra_images_${id}`, JSON.stringify(extraImages));
         }
+        localStorage.setItem(`wedding_theme_${id}`, formData.theme);
+      } catch (e) {
+        console.warn("Could not save to localStorage", e);
       }
 
       if (updateErr) {
@@ -448,6 +523,74 @@ export default function EditWedding() {
                 onChange={handleChange}
                 rows={3}
               />
+            </div>
+
+            {/* Additional Images */}
+            <div style={{ marginTop: "1.5rem", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
+              <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600, color: "#cbd5e1" }}>
+                Additional Gallery Images
+              </label>
+              <div className="upload-section">
+                <input
+                  ref={extraFileInputRef}
+                  id="extra_image_file_upload"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  style={{ display: "none" }}
+                  onChange={handleMultipleImageUpload}
+                />
+                <button
+                  type="button"
+                  className="btn-upload"
+                  onClick={() => extraFileInputRef.current?.click()}
+                  disabled={uploading}
+                >
+                  {uploading ? (
+                    <>
+                      <div className="spinner" style={{ width: 16, height: 16 }} />
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                      </svg>
+                      Upload More Images
+                    </>
+                  )}
+                </button>
+                <span className="upload-hint">JPG, PNG, WEBP · max 5 MB each</span>
+              </div>
+
+              {uploadError && (
+                <p className="upload-error" style={{ color: "#ef4444", fontSize: "0.85rem", marginTop: "0.5rem" }}>
+                  {uploadError}
+                </p>
+              )}
+
+              {extraImages && extraImages.length > 0 && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginTop: "1rem" }}>
+                  {extraImages.map((url, idx) => (
+                    <div key={idx} className="image-preview-wrap" style={{ position: "relative", display: "inline-block" }}>
+                      <img src={url} alt={`Extra ${idx + 1}`} className="image-preview" style={{ width: 100, height: 100, objectFit: "cover", borderRadius: "0.5rem" }} />
+                      <button
+                        type="button"
+                        className="btn-remove-image"
+                        style={{ position: "absolute", top: 4, right: 4 }}
+                        onClick={() => setExtraImages((prev) => {
+                          const updated = prev.filter((_, i) => i !== idx);
+                          setFormData((f) => ({ ...f, extra_images: updated }));
+                          return updated;
+                        })}
+                        title="Remove image"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

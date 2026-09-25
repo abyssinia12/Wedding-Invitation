@@ -454,3 +454,222 @@
   color: rgba(188, 143, 96, 0.6);
   margin: 0;
 }
+
+/* ── Photo Gallery Section ── */
+.f2-gallery-section {
+  padding: 0 0.5rem 1.5rem;
+  text-align: center;
+}
+
+.f2-gallery-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2.3rem;
+  color: #bc8f60;
+  margin: 0 0 0.25rem;
+}
+
+.f2-gallery-sub {
+  font-size: 0.85rem;
+  color: rgba(232, 213, 176, 0.65);
+  font-style: italic;
+  margin: 0 0 1.25rem;
+}
+
+.f2-gallery-track {
+  display: flex;
+  overflow-x: auto;
+  gap: 0.85rem;
+  padding: 0.5rem 0.25rem 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(188, 143, 96, 0.4) transparent;
+}
+
+.f2-gallery-track::-webkit-scrollbar {
+  height: 6px;
+}
+
+.f2-gallery-track::-webkit-scrollbar-thumb {
+  background: rgba(188, 143, 96, 0.4);
+  border-radius: 9999px;
+}
+
+.f2-gallery-item {
+  flex: 0 0 210px;
+  height: 260px;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  scroll-snap-align: center;
+  cursor: pointer;
+  border: 1px solid rgba(188, 143, 96, 0.3);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+  background: rgba(13, 33, 24, 0.6);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.f2-gallery-item:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: #bc8f60;
+  box-shadow: 0 10px 28px rgba(188, 143, 96, 0.25);
+}
+
+.f2-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.f2-gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.f2-gallery-item-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13, 33, 24, 0.85) 0%, transparent 60%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.f2-gallery-item:hover .f2-gallery-item-overlay {
+  opacity: 1;
+}
+
+.f2-gallery-item-overlay span {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #e8d5b0;
+  background: rgba(188, 143, 96, 0.2);
+  border: 1px solid rgba(188, 143, 96, 0.6);
+  padding: 0.35rem 0.8rem;
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+}
+
+.f2-gallery-hint {
+  font-size: 0.75rem;
+  color: rgba(188, 143, 96, 0.8);
+  letter-spacing: 0.05em;
+  margin: 0.25rem 0 0;
+}
+
+/* ── Lightbox Modal ── */
+.f2-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 24, 18, 0.94);
+  backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: f2FadeIn 0.25s ease-out;
+}
+
+@keyframes f2FadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.f2-lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.f2-lightbox-img {
+  max-width: 100%;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 1rem;
+  border: 1px solid rgba(188, 143, 96, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(188, 143, 96, 0.2);
+}
+
+.f2-lightbox-close {
+  position: absolute;
+  top: -45px;
+  right: 0;
+  background: rgba(188, 143, 96, 0.15);
+  border: 1px solid rgba(188, 143, 96, 0.4);
+  color: #e8d5b0;
+  font-size: 1.25rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.f2-lightbox-close:hover {
+  background: #bc8f60;
+  color: #0d2118;
+  transform: scale(1.1);
+}
+
+.f2-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(13, 33, 24, 0.7);
+  border: 1px solid rgba(188, 143, 96, 0.35);
+  color: #e8d5b0;
+  font-size: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  line-height: 1;
+}
+
+.f2-lightbox-nav:hover {
+  background: #bc8f60;
+  color: #0d2118;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.f2-lightbox-prev {
+  left: -55px;
+}
+
+.f2-lightbox-next {
+  right: -55px;
+}
+
+@media (max-width: 600px) {
+  .f2-lightbox-prev {
+    left: 8px;
+  }
+  .f2-lightbox-next {
+    right: 8px;
+  }
+}
+
+.f2-lightbox-counter {
+  margin-top: 0.85rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  color: #bc8f60;
+  text-transform: uppercase;
+}

@@ -58,6 +58,22 @@ export default function Invitations() {
         setError("Wedding not found or access denied.");
         return;
       }
+
+      let loadedExtra = [];
+      if (weddingData.extra_images) {
+        if (Array.isArray(weddingData.extra_images)) loadedExtra = weddingData.extra_images;
+        else if (typeof weddingData.extra_images === "string") {
+          try { loadedExtra = JSON.parse(weddingData.extra_images); } catch(e) {}
+        }
+      }
+      if (loadedExtra.length === 0 && weddingData.id) {
+        try {
+          const local = localStorage.getItem(`wedding_extra_images_${weddingData.id}`);
+          if (local) loadedExtra = JSON.parse(local);
+        } catch (e) {}
+      }
+      weddingData.extra_images = loadedExtra;
+
       setWedding(weddingData);
 
       // Fetch guests
@@ -354,6 +370,26 @@ export default function Invitations() {
                   📍 {wedding?.location_name}
                 </div>
               </div>
+
+              {/* Additional Images Strip */}
+              {wedding?.extra_images && wedding.extra_images.length > 0 && (
+                <div style={{ margin: "1rem 0", textAlign: "center" }}>
+                  <p style={{ margin: "0 0 0.5rem 0", fontSize: "0.75rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+                    ✦ Gallery Moments ({wedding.extra_images.length}) ✦
+                  </p>
+                  <div style={{ display: "flex", gap: "0.5rem", overflowX: "auto", paddingBottom: "0.5rem", justifyContent: wedding.extra_images.length <= 3 ? "center" : "flex-start" }}>
+                    {wedding.extra_images.map((imgUrl, i) => (
+                      <a key={i} href={imgUrl} target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0 }}>
+                        <img
+                          src={imgUrl}
+                          alt={`Gallery ${i + 1}`}
+                          style={{ width: "68px", height: "68px", objectFit: "cover", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.2)" }}
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* QR Entrance Passcode */}
               <div className="qr-preview-box" style={{ width: '100%', boxSizing: 'border-box' }}>

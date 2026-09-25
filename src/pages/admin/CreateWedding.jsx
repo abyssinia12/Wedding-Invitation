@@ -152,7 +152,11 @@ export default function CreateWedding() {
         if (urlData?.publicUrl) uploadedUrls.push(urlData.publicUrl);
       }
       if (uploadedUrls.length > 0) {
-        setExtraImages(prev => [...prev, ...uploadedUrls]);
+        setExtraImages((prev) => {
+          const updated = [...prev, ...uploadedUrls];
+          setFormData((f) => ({ ...f, extra_images: updated }));
+          return updated;
+        });
       }
     } catch (err) {
       console.error('Multiple image upload error:', err);
@@ -193,38 +197,43 @@ export default function CreateWedding() {
         location_address: formData.location_address ? formData.location_address.trim() : null,
         latitude: formData.latitude ? parseFloat(formData.latitude) : null,
         longitude: formData.longitude ? parseFloat(formData.longitude) : null,
-        // New field to hold extra image URLs
-        extra_images: formData.extra_images,
+        extra_images: extraImages,
         status: formData.status || "draft",
         theme: formData.theme || "first"
       };
 
-      // Try inserting with theme
+      // Try inserting with theme and extra_images
       let { data, error: insertErr } = await supabase
         .from("weddings")
         .insert([payload])
         .select()
         .single();
 
-      // If Supabase table doesn't have the 'theme' column yet, retry without 'theme'
-      if (insertErr && (insertErr.message?.includes("theme") || insertErr.code === "PGRST204")) {
-        const { theme: _, ...payloadWithoutTheme } = payload;
+      // If Supabase table doesn't have the 'theme' or 'extra_images' column yet, retry without them
+      if (insertErr && (insertErr.message?.includes("theme") || insertErr.message?.includes("extra_images") || insertErr.code === "PGRST204")) {
+        const fallbackPayload = { ...payload };
+        if (insertErr.message?.includes("theme")) delete fallbackPayload.theme;
+        if (insertErr.message?.includes("extra_images")) delete fallbackPayload.extra_images;
+
         const retryResult = await supabase
           .from("weddings")
-          .insert([payloadWithoutTheme])
+          .insert([fallbackPayload])
           .select()
           .single();
 
         data = retryResult.data;
         insertErr = retryResult.error;
+      }
 
-        // Remember user's chosen theme for this wedding in localStorage
-        if (data?.id) {
-          try {
-            localStorage.setItem(`wedding_theme_${data.id}`, formData.theme);
-          } catch (e) {
-            console.warn("Could not save theme to localStorage", e);
+      // Remember extra_images & theme for this wedding in localStorage
+      if (data?.id) {
+        try {
+          if (extraImages.length > 0) {
+            localStorage.setItem(`wedding_extra_images_${data.id}`, JSON.stringify(extraImages));
           }
+          localStorage.setItem(`wedding_theme_${data.id}`, formData.theme);
+        } catch (e) {
+          console.warn("Could not save to localStorage", e);
         }
       }
 
@@ -557,7 +566,11 @@ export default function CreateWedding() {
                       type="button"
                       className="btn-remove-image"
                       style={{ position: "absolute", top: 0, right: 0 }}
-                      onClick={() => setExtraImages(prev => prev.filter((_, i) => i !== idx))}
+                      onClick={() => setExtraImages((prev) => {
+                        const updated = prev.filter((_, i) => i !== idx);
+                        setFormData((f) => ({ ...f, extra_images: updated }));
+                        return updated;
+                      })}
                       title="Remove image"
                     >
                       ×

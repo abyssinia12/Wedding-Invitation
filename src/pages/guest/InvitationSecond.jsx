@@ -104,6 +104,31 @@ export default function InvitationSecond({ invite, wedding, guest }) {
     wedding.image_url ||
     "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80";
 
+  // Safely parse multiple extra images
+  const galleryImages = (() => {
+    let list = [];
+    if (Array.isArray(wedding?.extra_images)) {
+      list = wedding.extra_images;
+    } else if (typeof wedding?.extra_images === "string") {
+      try {
+        const parsed = JSON.parse(wedding.extra_images);
+        if (Array.isArray(parsed)) list = parsed;
+      } catch (e) {}
+    }
+    if (list.length === 0 && wedding?.id) {
+      try {
+        const stored = localStorage.getItem(`wedding_extra_images_${wedding.id}`);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) list = parsed;
+        }
+      } catch (e) {}
+    }
+    return list.filter((url) => typeof url === "string" && url.trim().length > 0);
+  })();
+
+  const [activePhotoIdx, setActivePhotoIdx] = useState(null);
+
   return (
     <div className="f2-page">
 
@@ -148,18 +173,81 @@ export default function InvitationSecond({ invite, wedding, guest }) {
             </div>
           </div>
           <p className="f2-guest-message">{wedding.message || defaultMessage}</p>
-          {/* Image Slideshow */}
-          {wedding.extra_images && wedding.extra_images.length > 0 && (
-            <div className="f2-image-slideshow" style={{ display: "flex", overflowX: "auto", gap: "0.5rem", marginTop: "1rem" }}>
-              {wedding.extra_images.map((url, idx) => (
-                <img key={idx} src={url} alt={`Extra ${idx + 1}`} style={{ maxHeight: "200px", borderRadius: "0.5rem" }} />
-              ))}
-            </div>
-          )}
           <p className="f2-guest-sub">
             Your presence is our greatest gift. We look forward to celebrating this joyous occasion with you, surrounded by the warmth of family and the beauty of love.
           </p>
         </div>
+
+        {/* ── Photo Gallery Section (Multiple Images) ── */}
+        {galleryImages.length > 0 && (
+          <>
+            <div className="f2-gallery-section">
+              <p className="f2-section-eyebrow">A Glimpse of Our Journey</p>
+              <h3 className="f2-gallery-title">Moments of Love</h3>
+              <p className="f2-gallery-sub">Cherished snapshots of our story together</p>
+
+              <div className="f2-gallery-track">
+                {galleryImages.map((url, idx) => (
+                  <div
+                    key={idx}
+                    className="f2-gallery-item"
+                    onClick={() => setActivePhotoIdx(idx)}
+                    title="Click to view photo"
+                  >
+                    <img src={url} alt={`Moment ${idx + 1}`} loading="lazy" />
+                    <div className="f2-gallery-item-overlay">
+                      <span>🌿 View Photo</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="f2-gallery-hint">Tap any photo to expand ({galleryImages.length} photos)</p>
+            </div>
+
+            <LeafDivider />
+          </>
+        )}
+
+        {/* Fullscreen Lightbox Modal */}
+        {activePhotoIdx !== null && galleryImages[activePhotoIdx] && (
+          <div className="f2-lightbox" onClick={() => setActivePhotoIdx(null)}>
+            <div className="f2-lightbox-content" onClick={(e) => e.stopPropagation()}>
+              <button
+                className="f2-lightbox-close"
+                onClick={() => setActivePhotoIdx(null)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+              {galleryImages.length > 1 && (
+                <>
+                  <button
+                    className="f2-lightbox-nav f2-lightbox-prev"
+                    onClick={() => setActivePhotoIdx((prev) => (prev > 0 ? prev - 1 : galleryImages.length - 1))}
+                    aria-label="Previous image"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    className="f2-lightbox-nav f2-lightbox-next"
+                    onClick={() => setActivePhotoIdx((prev) => (prev < galleryImages.length - 1 ? prev + 1 : 0))}
+                    aria-label="Next image"
+                  >
+                    ›
+                  </button>
+                </>
+              )}
+              <img
+                src={galleryImages[activePhotoIdx]}
+                alt={`Photo ${activePhotoIdx + 1}`}
+                className="f2-lightbox-img"
+              />
+              <div className="f2-lightbox-counter">
+                Photo {activePhotoIdx + 1} of {galleryImages.length}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* ── Countdown ── */}
         {wedding.wedding_date && (

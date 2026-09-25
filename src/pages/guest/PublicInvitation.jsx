@@ -73,6 +73,28 @@ export default function PublicInvitation() {
         return;
       }
 
+      // Ensure extra_images is parsed and available
+      let loadedExtra = [];
+      if (wedding.extra_images) {
+        if (Array.isArray(wedding.extra_images)) loadedExtra = wedding.extra_images;
+        else if (typeof wedding.extra_images === "string") {
+          try {
+            const parsed = JSON.parse(wedding.extra_images);
+            if (Array.isArray(parsed)) loadedExtra = parsed;
+          } catch (e) {}
+        }
+      }
+      if (loadedExtra.length === 0 && wedding.id) {
+        try {
+          const localExtra = localStorage.getItem(`wedding_extra_images_${wedding.id}`);
+          if (localExtra) {
+            const parsed = JSON.parse(localExtra);
+            if (Array.isArray(parsed)) loadedExtra = parsed;
+          }
+        } catch (e) {}
+      }
+      wedding.extra_images = loadedExtra;
+
       setInvitationData({ invite, wedding, guest });
 
       // Check for theme: 1. URL query param, 2. wedding.theme column, 3. localStorage fallback
