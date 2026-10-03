@@ -7,6 +7,8 @@ import EditWedding from './pages/admin/EditWedding';
 import GuestList from './pages/admin/GuestList';
 import CreateGuest from './pages/admin/CreateGuest';
 import Invitations from './pages/admin/Invitations';
+import CheckIn from './pages/admin/CheckIn';
+import CheckInHub from './pages/admin/CheckInHub';
 import PublicInvitation from './pages/guest/PublicInvitation';
 import InvitationStylesPreview from './pages/guest/InvitationStylesPreview';
 import AdminSidebar from './components/AdminSidebar';
@@ -73,6 +75,22 @@ function App() {
           element={
             <AdminSidebar>
               <Invitations />
+            </AdminSidebar>
+          }
+        />
+        <Route
+          path="/admin/checkin"
+          element={
+            <AdminSidebar>
+              <CheckInHub />
+            </AdminSidebar>
+          }
+        />
+        <Route
+          path="/admin/wedding/:weddingId/checkin"
+          element={
+            <AdminSidebar>
+              <CheckIn />
             </AdminSidebar>
           }
         />

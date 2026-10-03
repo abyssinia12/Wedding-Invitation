@@ -1,0 +1,336 @@
+/* ══════════════════════════════════════════════════════════════
+   Check-In Hub Styles
+   ══════════════════════════════════════════════════════════════ */
+
+.checkin-hub-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .checkin-hub-page {
+    padding: 1rem;
+  }
+}
+
+.checkin-hub-loading {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #94a3b8;
+}
+
+.checkin-hub-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(99, 102, 241, 0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: checkinHubSpin 0.8s linear infinite;
+}
+
+@keyframes checkinHubSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.checkin-hub-header {
+  margin-bottom: 2rem;
+}
+
+.checkin-hub-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+  font-size: 0.775rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.hub-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.checkin-hub-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.025em;
+}
+
+.checkin-hub-sub {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  margin: 0;
+  max-width: 680px;
+  line-height: 1.5;
+}
+
+.checkin-hub-controls {
+  margin-bottom: 1.75rem;
+}
+
+.checkin-hub-search {
+  position: relative;
+  max-width: 460px;
+}
+
+.checkin-hub-search svg {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.checkin-hub-search input {
+  width: 100%;
+  padding: 0.7rem 2.2rem 0.7rem 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+  font-size: 0.9rem;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.checkin-hub-search input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.checkin-hub-empty {
+  padding: 4rem 1.5rem;
+  text-align: center;
+  color: #94a3b8;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.checkin-hub-empty h3 {
+  margin: 1rem 0 0.4rem 0;
+  color: #f8fafc;
+  font-size: 1.25rem;
+}
+
+/* ── Desks Grid ── */
+.checkin-desks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .checkin-desks-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.checkin-desk-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.15rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s ease;
+}
+
+.checkin-desk-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.checkin-desk-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.desk-couple-info {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.desk-ring-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.desk-couple-names {
+  margin: 0 0 0.35rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.desk-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.desk-meta-item {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+.desk-status-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+}
+
+.desk-status-pill.published {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.desk-status-pill.draft {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.desk-status-pill.closed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+/* ── Progress Box ── */
+.desk-stats-box {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.desk-stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+  font-size: 0.825rem;
+}
+
+.desk-stat-label {
+  color: #94a3b8;
+}
+
+.desk-stat-numbers {
+  color: #cbd5e1;
+}
+
+.desk-stat-numbers strong {
+  color: #10b981;
+  font-weight: 700;
+}
+
+.desk-progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.desk-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1 0%, #10b981 100%);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* ── Actions ── */
+.desk-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.btn-open-desk {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.65rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-open-desk:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+}
+
+.btn-desk-guests {
+  padding: 0.65rem 1rem;
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-desk-guests:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}

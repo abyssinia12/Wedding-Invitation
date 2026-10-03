@@ -1,0 +1,674 @@
+/* ══════════════════════════════════════════════════════════════
+   Wedding Check-In Desk Styles
+   ══════════════════════════════════════════════════════════════ */
+
+.checkin-page {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+@media (max-width: 640px) {
+  .checkin-page {
+    padding: 1rem 0.75rem;
+  }
+}
+
+/* ── Loading & Error Screens ── */
+.checkin-loading-screen,
+.checkin-error-screen {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.checkin-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(99, 102, 241, 0.2);
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: checkinSpin 0.8s linear infinite;
+}
+
+@keyframes checkinSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.checkin-error-icon {
+  font-size: 3rem;
+}
+
+/* ── Top Header ── */
+.checkin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.checkin-back-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.checkin-back-link:hover {
+  color: #c7d2fe;
+}
+
+.checkin-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0 0 0.4rem 0;
+  letter-spacing: -0.02em;
+}
+
+.checkin-wedding-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  font-size: 0.85rem;
+}
+
+.checkin-wedding-couple {
+  color: #e0e7ff;
+  font-weight: 700;
+}
+
+.checkin-wedding-date {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.checkin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-scan-qr {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+  transition: all 0.22s ease;
+}
+
+.btn-scan-qr:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.55);
+}
+
+.btn-scan-qr.active {
+  background: #dc2626;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4);
+}
+
+/* ── Success Toast Banner ── */
+.checkin-toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-radius: 0.875rem;
+  margin-bottom: 1.5rem;
+  animation: checkinToastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes checkinToastSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.checkin-toast.checked_in {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.15) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+}
+
+.checkin-toast.already_checked {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.15) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.45);
+}
+
+.checkin-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.checkin-toast-icon {
+  font-size: 1.6rem;
+}
+
+.checkin-toast-name {
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.checkin-toast-sub {
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  margin: 0.15rem 0 0 0;
+}
+
+.checkin-toast-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.15rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+/* ── QR Scanner Box ── */
+.checkin-scanner-box {
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.75rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+}
+
+.checkin-scanner-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.checkin-scanner-head h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #f8fafc;
+}
+
+.checkin-scanner-head p {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+.btn-close-scanner {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.checkin-qr-viewport {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #000;
+  border: 2px solid rgba(99, 102, 241, 0.5);
+}
+
+.checkin-scanner-alert {
+  margin-top: 0.85rem;
+  padding: 0.65rem 1rem;
+  border-radius: 0.5rem;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.checkin-manual-token-form {
+  display: flex;
+  gap: 0.65rem;
+  margin-top: 1rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.checkin-manual-input {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  border-radius: 0.65rem;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.checkin-manual-input:focus {
+  border-color: #6366f1;
+}
+
+.btn-manual-submit {
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.65rem;
+  background: #6366f1;
+  color: #ffffff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* ── Live Stats Cards ── */
+.checkin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.75rem;
+}
+
+@media (max-width: 768px) {
+  .checkin-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+}
+
+.checkin-stat-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  padding: 1.25rem 1.35rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.checkin-stat-card.primary {
+  border-color: rgba(99, 102, 241, 0.35);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(15, 23, 42, 0.7) 100%);
+}
+
+.checkin-stat-card.success {
+  border-color: rgba(16, 185, 129, 0.35);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.7) 100%);
+}
+
+.checkin-stat-card.warning {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(15, 23, 42, 0.7) 100%);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #94a3b8;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+
+.stat-num {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1.1;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.stat-total {
+  font-size: 1.1rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.stat-sub {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-top: 0.45rem;
+}
+
+.stat-progress-bar {
+  margin-top: 0.85rem;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.stat-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #10b981);
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+/* ── Search & Filter Controls ── */
+.checkin-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.checkin-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+
+.checkin-search-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px;
+  height: 17px;
+  color: #64748b;
+  pointer-events: none;
+}
+
+.checkin-search-input {
+  width: 100%;
+  padding: 0.65rem 2.2rem 0.65rem 2.5rem;
+  border-radius: 0.75rem;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.checkin-search-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.checkin-search-clear {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.checkin-filter-tabs {
+  display: flex;
+  gap: 0.4rem;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 0.3rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.filter-tab {
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #94a3b8;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.filter-tab:hover {
+  color: #f8fafc;
+}
+
+.filter-tab.active {
+  background: #6366f1;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+}
+
+/* ── Guest List Items ── */
+.checkin-table-container {
+  background: rgba(15, 23, 42, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.checkin-empty {
+  padding: 4rem 1.5rem;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.checkin-empty h3 {
+  margin: 0.85rem 0 0.25rem 0;
+  color: #f8fafc;
+  font-size: 1.15rem;
+}
+
+.checkin-empty p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.checkin-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkin-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.15rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.2s ease;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.checkin-item:last-child {
+  border-bottom: none;
+}
+
+.checkin-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.checkin-item.is-checked-in {
+  background: rgba(16, 185, 129, 0.04);
+}
+
+.checkin-item.is-checked-in:hover {
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.checkin-item-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.checkin-item-status-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.icon-badge-checked {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #10b981;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+}
+
+.icon-badge-pending {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.checkin-item-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.checkin-item-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.checkin-party-pill {
+  font-size: 0.725rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.checkin-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  color: #94a3b8;
+  flex-wrap: wrap;
+}
+
+.checkin-token-code {
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  color: #cbd5e1;
+  font-size: 0.75rem;
+}
+
+/* ── Action Buttons ── */
+.checkin-item-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-checkin-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 0.65rem;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s ease;
+}
+
+.btn-checkin-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+}
+
+.checkin-checked-status-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.checkin-time-badge {
+  font-size: 0.785rem;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.3rem 0.65rem;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.btn-undo-checkin {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-undo-checkin:hover {
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.1);
+}

@@ -193,7 +193,24 @@ export default function Invitations() {
           </svg>
           WeddingAdmin
         </Link>
-        <div className="nav-user">
+        <div className="nav-user" style={{ display: 'flex', gap: '0.75rem' }}>
+          <Link
+            to={`/admin/wedding/${weddingId}/checkin`}
+            className="btn-secondary"
+            style={{
+              borderColor: "rgba(16, 185, 129, 0.4)",
+              background: "rgba(16, 185, 129, 0.12)",
+              color: "#6ee7b7",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "0.4rem",
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Check-In Desk
+          </Link>
           <Link to={`/admin/wedding/${weddingId}/guests`} className="btn-secondary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />

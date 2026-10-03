@@ -11,6 +11,7 @@ export default function AdminSidebar({ children }) {
   const [selectedWeddingId, setSelectedWeddingId] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [weddingMenuOpen, setWeddingMenuOpen] = useState(true);
+  const [checkInMenuOpen, setCheckInMenuOpen] = useState(true);
 
   useEffect(() => {
     fetchSessionAndWeddings();
@@ -63,11 +64,13 @@ export default function AdminSidebar({ children }) {
   const handleWeddingSelect = (newId) => {
     setSelectedWeddingId(newId);
 
-    // If currently viewing guest list or invitations for a wedding, navigate to new wedding
+    // If currently viewing guest list, invitations, or check-in for a wedding, navigate to new wedding
     if (location.pathname.includes("/guests")) {
       navigate(`/admin/wedding/${newId}/guests`);
     } else if (location.pathname.includes("/invitations")) {
       navigate(`/admin/wedding/${newId}/invitations`);
+    } else if (location.pathname.includes("/checkin")) {
+      navigate(`/admin/wedding/${newId}/checkin`);
     }
   };
 
@@ -78,6 +81,8 @@ export default function AdminSidebar({ children }) {
     location.pathname === "/admin/weddings" ||
     location.pathname === "/admin/create-wedding" ||
     location.pathname.includes("/edit-wedding");
+
+  const isCheckInActive = location.pathname.includes("/checkin");
 
   return (
     <div className="admin-layout-wrapper">
@@ -168,6 +173,64 @@ export default function AdminSidebar({ children }) {
             )}
           </div>
 
+          {/* Check-In Menu Section */}
+          <div className="sidebar-menu-group" style={{ marginTop: '0.4rem' }}>
+            <button
+              className={`sidebar-menu-header ${isCheckInActive ? "header-active" : ""}`}
+              onClick={() => setCheckInMenuOpen(!checkInMenuOpen)}
+              type="button"
+            >
+              <div className="menu-header-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Check-In</span>
+              </div>
+              <svg
+                className={`chevron-icon ${checkInMenuOpen ? "open" : ""}`}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {checkInMenuOpen && (
+              <div className="sidebar-submenu">
+                <Link
+                  to="/admin/checkin"
+                  className={`sidebar-item submenu-item ${location.pathname === "/admin/checkin" ? "active" : ""}`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="3" width="7" height="7" rx="1" />
+                    <rect x="14" y="3" width="7" height="7" rx="1" />
+                    <rect x="3" y="14" width="7" height="7" rx="1" />
+                    <rect x="14" y="14" width="7" height="7" rx="1" />
+                  </svg>
+                  All Check-In Desks
+                </Link>
+
+                {currentWeddingId && (
+                  <Link
+                    to={`/admin/wedding/${currentWeddingId}/checkin`}
+                    className={`sidebar-item submenu-item ${
+                      location.pathname === `/admin/wedding/${currentWeddingId}/checkin` ? "active" : ""
+                    }`}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    Live Check-In Desk
+                  </Link>
+                )}
+              </div>
+            )}
+          </div>
+
           <span className="nav-section-label" style={{ marginTop: '0.75rem' }}>Guest Management</span>
 
           {weddings.length > 0 && (
@@ -220,6 +283,17 @@ export default function AdminSidebar({ children }) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 Invitations & QR
+              </Link>
+
+              <Link
+                to={`/admin/wedding/${currentWeddingId}/checkin`}
+                className={`sidebar-item ${location.pathname.includes('/checkin') ? "active" : ""}`}
+                onClick={() => setMobileOpen(false)}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Check-In Desk
               </Link>
 
               <Link

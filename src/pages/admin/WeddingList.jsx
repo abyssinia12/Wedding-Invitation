@@ -227,6 +227,18 @@ function WeddingList() {
                       </Link>
 
                       <Link
+                        to={`/admin/wedding/${w.id}/checkin`}
+                        className="action-btn"
+                        style={{ background: "rgba(16,185,129,0.15)", color: "#6ee7b7", borderColor: "rgba(16,185,129,0.35)" }}
+                        title="Open Check-In Desk for this wedding"
+                      >
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Check In
+                      </Link>
+
+                      <Link
                         to={`/admin/wedding/${w.id}/guests/create`}
                         className="action-btn edit"
                       >
