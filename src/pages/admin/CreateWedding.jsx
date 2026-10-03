@@ -1,8 +1,35 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
-import StyleSelectorBar from "../../components/StyleSelectorBar";
 import "./CreateWedding.css";
+import "./ThemePicker.css";
+
+const INVITATION_STYLES = [
+  {
+    key: "first",
+    name: "Style 1 — Royal Crimson",
+    tag: "Ornate & Regal",
+    desc: "Deep crimson velvet background, sparkling gold accents, Great Vibes calligraphy, and floating golden petals.",
+    swatch: ["#8b0000", "#c9a84c", "#f5e6c8"],
+    emoji: "👑",
+  },
+  {
+    key: "second",
+    name: "Style 2 — Midnight Botanical",
+    tag: "Romantic Garden",
+    desc: "Deep emerald forest backdrop, warm amber gold details, delicate leaf dividers, and floating bokeh glow circles.",
+    swatch: ["#0d2118", "#2d5a3d", "#bc8f60"],
+    emoji: "🌿",
+  },
+  {
+    key: "thered",
+    name: "Style 3 — Pure Ivory & Champagne",
+    tag: "Editorial Luxury",
+    desc: "Clean modern editorial layout, warm sand & champagne palette, Alex Brush script, and minimalist luxury frame.",
+    swatch: ["#fdfaf6", "#d8c5b0", "#bfa181"],
+    emoji: "🥂",
+  },
+];
 
 const PRESET_IMAGES = [
   "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80",
@@ -610,34 +637,77 @@ export default function CreateWedding() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
               </svg>
-              6. Choose Invitation Style
+              6. Invitation Style
             </h2>
-            <div style={{
-              background: "rgba(15, 23, 42, 0.7)",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              borderRadius: "0.875rem",
-              padding: "1.25rem 1rem",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "0.75rem"
-            }}>
-              <p style={{ margin: 0, fontSize: "0.875rem", color: "#94a3b8", textAlign: "center" }}>
-                Select the invitation style using the bar below (or via the floating bar pinned at the bottom):
+            <div className="theme-picker-wrapper">
+              <p className="theme-picker-hint">
+                Choose the visual style that guests will see when they open their invitation. This style will be permanently set for this wedding.
               </p>
-              <div style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                padding: "0.35rem 0.75rem",
-                borderRadius: "9999px",
-                background: "rgba(99, 102, 241, 0.15)",
-                border: "1px solid rgba(99, 102, 241, 0.35)",
-                color: "#c7d2fe",
-                fontSize: "0.825rem",
-                fontWeight: 600
-              }}>
-                Current Selected Style: <span style={{ textTransform: "capitalize", color: "#ffffff", fontWeight: 700 }}>{formData.theme}</span>
+
+              <div className="theme-picker-grid">
+                {INVITATION_STYLES.map((style) => {
+                  const isSelected = formData.theme === style.key;
+                  return (
+                    <div
+                      key={style.key}
+                      className={`theme-card ${isSelected ? "theme-card--active" : ""}`}
+                      onClick={() => setFormData((prev) => ({ ...prev, theme: style.key }))}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          setFormData((prev) => ({ ...prev, theme: style.key }));
+                        }
+                      }}
+                    >
+                      <div>
+                        <div className="theme-card__header">
+                          <div className="theme-card__swatches">
+                            {style.swatch.map((c, i) => (
+                              <span key={i} className="theme-card__swatch" style={{ background: c }} />
+                            ))}
+                          </div>
+                          <span className="theme-card__emoji">{style.emoji}</span>
+                        </div>
+
+                        <div className="theme-card__title-row">
+                          <h4 className="theme-card__name">{style.name}</h4>
+                          <span className="theme-card__tag">{style.tag}</span>
+                        </div>
+
+                        <p className="theme-card__desc">{style.desc}</p>
+                      </div>
+
+                      <div className="theme-card__footer">
+                        <div className="theme-card__radio">
+                          <div className="theme-card__radio-circle">
+                            {isSelected && <div className="theme-card__radio-inner" />}
+                          </div>
+                          <span>{isSelected ? "Selected Style" : "Select Style"}</span>
+                        </div>
+                        {isSelected ? (
+                          <span className="theme-card__selected-pill">✓ Active</span>
+                        ) : (
+                          <span className="theme-card__select-pill">Click to choose</span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="theme-preview-notice">
+                <span className="theme-preview-notice-text">
+                  ✨ Want to preview how each style looks with mock data?
+                </span>
+                <Link
+                  to="/preview-styles"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="theme-preview-link"
+                >
+                  Open Styles Preview ↗
+                </Link>
               </div>
             </div>
           </div>
@@ -659,14 +729,6 @@ export default function CreateWedding() {
           </div>
         </form>
       </div>
-
-      {/* Floating Glassmorphic Style Switcher Bar pinned to bottom */}
-      <StyleSelectorBar
-        currentStyle={formData.theme}
-        onSelectStyle={(selectedStyle) =>
-          setFormData((prev) => ({ ...prev, theme: selectedStyle }))
-        }
-      />
     </div>
   );
 }

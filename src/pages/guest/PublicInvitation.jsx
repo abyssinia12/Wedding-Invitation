@@ -4,36 +4,21 @@ import { supabase } from "../../lib/supabase";
 import InvitationFirst from "./InvitationFirst";
 import InvitationSecond from "./InvitationSecond";
 import InvitationThird from "./InvitationThird";
-import StyleSelectorBar from "../../components/StyleSelectorBar";
 import "./PublicInvitation.css";
 
 export default function PublicInvitation() {
   const { token } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [invitationData, setInvitationData] = useState(null);
+  const [currentStyle, setCurrentStyle] = useState("first");
 
-  // 3 options: 'first', 'second', 'thered'
   const styleParam = searchParams.get("style");
-  const [currentStyle, setCurrentStyle] = useState(
-    styleParam === "second" || styleParam === "thered" ? styleParam : "first"
-  );
 
   useEffect(() => {
     fetchPersonalizedInvitation();
   }, [token]);
-
-  useEffect(() => {
-    if (styleParam && ["first", "second", "thered"].includes(styleParam)) {
-      setCurrentStyle(styleParam);
-    }
-  }, [styleParam]);
-
-  const handleSelectStyle = (newStyle) => {
-    setCurrentStyle(newStyle);
-    setSearchParams({ style: newStyle });
-  };
 
   const fetchPersonalizedInvitation = async () => {
     setLoading(true);
@@ -97,12 +82,22 @@ export default function PublicInvitation() {
 
       setInvitationData({ invite, wedding, guest });
 
-      // Check for theme: 1. URL query param, 2. wedding.theme column, 3. localStorage fallback
-      if (!styleParam) {
-        const savedTheme = wedding.theme || localStorage.getItem(`wedding_theme_${wedding.id}`);
-        if (savedTheme && ["first", "second", "thered"].includes(savedTheme)) {
-          setCurrentStyle(savedTheme);
-        }
+      // Determine style set during wedding creation
+      const rawTheme = wedding.theme || localStorage.getItem(`wedding_theme_${wedding.id}`);
+      let resolvedStyle = "first";
+      if (rawTheme === "second" || rawTheme === "garden" || rawTheme === "midnight") {
+        resolvedStyle = "second";
+      } else if (rawTheme === "thered" || rawTheme === "third") {
+        resolvedStyle = "thered";
+      } else if (rawTheme === "first" || rawTheme === "classic") {
+        resolvedStyle = "first";
+      }
+
+      // Allow optional developer URL override (?style=second) if specified, otherwise strictly use wedding style
+      if (styleParam && ["first", "second", "thered"].includes(styleParam)) {
+        setCurrentStyle(styleParam);
+      } else {
+        setCurrentStyle(resolvedStyle);
       }
     } catch (err) {
       console.error("Fetch public invitation error:", err);
@@ -136,7 +131,7 @@ export default function PublicInvitation() {
 
   return (
     <div style={{ position: "relative" }}>
-      {/* Active Invitation Style Component */}
+      {/* Active Invitation Style Component (set at wedding creation time) */}
       {currentStyle === "first" && (
         <InvitationFirst invite={invite} wedding={wedding} guest={guest} />
       )}
@@ -146,12 +141,6 @@ export default function PublicInvitation() {
       {currentStyle === "thered" && (
         <InvitationThird invite={invite} wedding={wedding} guest={guest} />
       )}
-
-      {/* Floating Style Selection Controls with first, second, and thered */}
-      <StyleSelectorBar
-        currentStyle={currentStyle}
-        onSelectStyle={handleSelectStyle}
-      />
     </div>
   );
 }

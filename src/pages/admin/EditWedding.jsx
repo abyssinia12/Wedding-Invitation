@@ -5,27 +5,30 @@ import "./CreateWedding.css";
 import "./EditWedding.css";
 import "./ThemePicker.css";
 
-const THEMES = [
+const INVITATION_STYLES = [
   {
-    key: "classic",
-    name: "Classic Crimson & Gold",
-    desc: "Timeless dark red velvet with golden accents",
+    key: "first",
+    name: "Style 1 — Royal Crimson",
+    tag: "Ornate & Regal",
+    desc: "Deep crimson velvet background, sparkling gold accents, Great Vibes calligraphy, and floating golden petals.",
     swatch: ["#8b0000", "#c9a84c", "#f5e6c8"],
-    emoji: "🌹",
+    emoji: "👑",
   },
   {
-    key: "garden",
-    name: "Garden Blush",
-    desc: "Soft sage green with romantic blush pink tones",
-    swatch: ["#3d5a47", "#d4a0a0", "#fdf6f0"],
-    emoji: "🌸",
+    key: "second",
+    name: "Style 2 — Midnight Botanical",
+    tag: "Romantic Garden",
+    desc: "Deep emerald forest backdrop, warm amber gold details, delicate leaf dividers, and floating bokeh glow circles.",
+    swatch: ["#0d2118", "#2d5a3d", "#bc8f60"],
+    emoji: "🌿",
   },
   {
-    key: "midnight",
-    name: "Midnight Velvet",
-    desc: "Deep navy blue with champagne gold shimmer",
-    swatch: ["#0d1b3e", "#c8a96e", "#e8dcc8"],
-    emoji: "✨",
+    key: "thered",
+    name: "Style 3 — Pure Ivory & Champagne",
+    tag: "Editorial Luxury",
+    desc: "Clean modern editorial layout, warm sand & champagne palette, Alex Brush script, and minimalist luxury frame.",
+    swatch: ["#fdfaf6", "#d8c5b0", "#bfa181"],
+    emoji: "🥂",
   },
 ];
 
@@ -62,7 +65,7 @@ export default function EditWedding() {
     message: "",
     image_url: PRESET_IMAGES[0],
     status: "draft",
-    theme: "classic",
+    theme: "first",
     extra_images: []
   });
 
@@ -137,7 +140,13 @@ export default function EditWedding() {
         message: wedding.message || "",
         image_url: wedding.image_url || PRESET_IMAGES[0],
         status: wedding.status || "draft",
-        theme: wedding.theme || "classic",
+        theme: (() => {
+          const raw = wedding.theme || localStorage.getItem(`wedding_theme_${id}`);
+          if (raw === "classic") return "first";
+          if (raw === "garden" || raw === "midnight") return "second";
+          if (raw === "third") return "thered";
+          return ["first", "second", "thered"].includes(raw) ? raw : "first";
+        })(),
         extra_images: loadedExtra
       });
     } catch (err) {
@@ -625,28 +634,75 @@ export default function EditWedding() {
               </svg>
               6. Invitation Page Style
             </h2>
-            <p className="theme-picker-hint">Choose the visual theme your guests will see on their invitation.</p>
-            <div className="theme-picker-grid">
-              {THEMES.map((theme) => (
-                <button
-                  key={theme.key}
-                  type="button"
-                  className={`theme-card ${formData.theme === theme.key ? "theme-card--active" : ""}`}
-                  onClick={() => setFormData((prev) => ({ ...prev, theme: theme.key }))}
+            <div className="theme-picker-wrapper">
+              <p className="theme-picker-hint">
+                Choose the visual style that guests will see when they open their invitation.
+              </p>
+              <div className="theme-picker-grid">
+                {INVITATION_STYLES.map((style) => {
+                  const isSelected = formData.theme === style.key;
+                  return (
+                    <div
+                      key={style.key}
+                      className={`theme-card ${isSelected ? "theme-card--active" : ""}`}
+                      onClick={() => setFormData((prev) => ({ ...prev, theme: style.key }))}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          setFormData((prev) => ({ ...prev, theme: style.key }));
+                        }
+                      }}
+                    >
+                      <div>
+                        <div className="theme-card__header">
+                          <div className="theme-card__swatches">
+                            {style.swatch.map((color, i) => (
+                              <span key={i} className="theme-card__swatch" style={{ background: color }} />
+                            ))}
+                          </div>
+                          <span className="theme-card__emoji">{style.emoji}</span>
+                        </div>
+
+                        <div className="theme-card__title-row">
+                          <h4 className="theme-card__name">{style.name}</h4>
+                          <span className="theme-card__tag">{style.tag}</span>
+                        </div>
+
+                        <p className="theme-card__desc">{style.desc}</p>
+                      </div>
+
+                      <div className="theme-card__footer">
+                        <div className="theme-card__radio">
+                          <div className="theme-card__radio-circle">
+                            {isSelected && <div className="theme-card__radio-inner" />}
+                          </div>
+                          <span>{isSelected ? "Selected Style" : "Select Style"}</span>
+                        </div>
+                        {isSelected ? (
+                          <span className="theme-card__selected-pill">✓ Active</span>
+                        ) : (
+                          <span className="theme-card__select-pill">Click to choose</span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="theme-preview-notice">
+                <span className="theme-preview-notice-text">
+                  ✨ Want to preview how each style looks with mock data?
+                </span>
+                <Link
+                  to="/preview-styles"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="theme-preview-link"
                 >
-                  <div className="theme-card__swatches">
-                    {theme.swatch.map((color, i) => (
-                      <span key={i} className="theme-card__swatch" style={{ background: color }} />
-                    ))}
-                  </div>
-                  <div className="theme-card__emoji">{theme.emoji}</div>
-                  <div className="theme-card__name">{theme.name}</div>
-                  <div className="theme-card__desc">{theme.desc}</div>
-                  {formData.theme === theme.key && (
-                    <div className="theme-card__badge">✓ Selected</div>
-                  )}
-                </button>
-              ))}
+                  Open Styles Preview ↗
+                </Link>
+              </div>
             </div>
           </div>
 

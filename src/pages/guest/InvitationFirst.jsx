@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
+import AutoPlaySlideshow from "../../components/AutoPlaySlideshow";
 import "./InvitationFirst.css";
 
 /* ── Helpers ─────────────────────────────────────────── */
@@ -124,8 +125,6 @@ export default function InvitationFirst({ invite, wedding, guest }) {
     return list.filter((url) => typeof url === "string" && url.trim().length > 0);
   })();
 
-  const [activePhotoIdx, setActivePhotoIdx] = useState(null);
-
   return (
     <div className="f1-page">
       <div className="f1-wrapper">
@@ -171,7 +170,7 @@ export default function InvitationFirst({ invite, wedding, guest }) {
           <p className="f1-subtext">{defaultSubtext}</p>
         </div>
 
-        {/* ── Photo Gallery Section (Multiple Images) ── */}
+        {/* ── Photo Gallery Section (Auto-Playing Slideshow) ── */}
         {galleryImages.length > 0 && (
           <div className="f1-gallery-card">
             <p className="f1-gallery-label">✦ Captured Moments ✦</p>
@@ -181,63 +180,11 @@ export default function InvitationFirst({ invite, wedding, guest }) {
               <span>✦</span>
             </div>
 
-            <div className="f1-gallery-track">
-              {galleryImages.map((url, idx) => (
-                <div
-                  key={idx}
-                  className="f1-gallery-item"
-                  onClick={() => setActivePhotoIdx(idx)}
-                  title="Click to view full photo"
-                >
-                  <img src={url} alt={`Moment ${idx + 1}`} loading="lazy" />
-                  <div className="f1-gallery-item-overlay">
-                    <span>🔍 View</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="f1-gallery-hint">Tap any photo to view full size ({galleryImages.length} photos)</p>
-          </div>
-        )}
-
-        {/* Fullscreen Lightbox Modal */}
-        {activePhotoIdx !== null && galleryImages[activePhotoIdx] && (
-          <div className="f1-lightbox" onClick={() => setActivePhotoIdx(null)}>
-            <div className="f1-lightbox-content" onClick={(e) => e.stopPropagation()}>
-              <button
-                className="f1-lightbox-close"
-                onClick={() => setActivePhotoIdx(null)}
-                aria-label="Close"
-              >
-                ✕
-              </button>
-              {galleryImages.length > 1 && (
-                <>
-                  <button
-                    className="f1-lightbox-nav f1-lightbox-prev"
-                    onClick={() => setActivePhotoIdx((prev) => (prev > 0 ? prev - 1 : galleryImages.length - 1))}
-                    aria-label="Previous image"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    className="f1-lightbox-nav f1-lightbox-next"
-                    onClick={() => setActivePhotoIdx((prev) => (prev < galleryImages.length - 1 ? prev + 1 : 0))}
-                    aria-label="Next image"
-                  >
-                    ›
-                  </button>
-                </>
-              )}
-              <img
-                src={galleryImages[activePhotoIdx]}
-                alt={`Photo ${activePhotoIdx + 1}`}
-                className="f1-lightbox-img"
-              />
-              <div className="f1-lightbox-counter">
-                Photo {activePhotoIdx + 1} of {galleryImages.length}
-              </div>
-            </div>
+            <AutoPlaySlideshow
+              images={galleryImages}
+              theme="first"
+              title={`${wedding.bride_name} & ${wedding.groom_name}`}
+            />
           </div>
         )}
 
