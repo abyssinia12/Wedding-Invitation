@@ -16,6 +16,25 @@ export default function Invitations() {
   const [copiedId, setCopiedId] = useState(null);
   const [error, setError] = useState(null);
   const [previewGuest, setPreviewGuest] = useState(null);
+  const [previewMode, setPreviewMode] = useState("mobile");
+  const [iframeLoading, setIframeLoading] = useState(true);
+
+  // Keyboard navigation & body scroll lock for preview modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setPreviewGuest(null);
+      }
+    };
+    if (previewGuest) {
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "auto";
+    };
+  }, [previewGuest]);
 
   useEffect(() => {
     fetchData();
@@ -295,7 +314,23 @@ export default function Invitations() {
 
                       {/* Token & URL */}
                       <div className="token-display-box">
-                        <span>{invite.invitation_url}</span>
+                        <a
+                          href={invite.invitation_url || `/invite/${invite.token}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="Open link in new tab"
+                          style={{
+                            color: "#a5b4fc",
+                            textDecoration: "none",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            display: "inline-block",
+                            maxWidth: "calc(100% - 90px)"
+                          }}
+                        >
+                          {invite.invitation_url}
+                        </a>
                         <button
                           className="url-copy-btn"
                           onClick={() => handleCopyUrl(g.id, invite.invitation_url)}
@@ -307,7 +342,11 @@ export default function Invitations() {
                       <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
                         <button
                           className="action-btn"
-                          onClick={() => setPreviewGuest({ guest: g, invite })}
+                          onClick={() => {
+                            setPreviewGuest({ guest: g, invite });
+                            setIframeLoading(true);
+                            setPreviewMode("mobile");
+                          }}
                         >
                           Show Invitation
                         </button>
@@ -342,85 +381,91 @@ export default function Invitations() {
         )}
       </div>
 
-      {/* Personalized Invitation Preview Modal */}
+      {/* Exact Personalized Invitation Preview Modal */}
       {previewGuest && (
-        <div className="modal-overlay" onClick={() => setPreviewGuest(null)}>
-          <div className="personalized-invitation-card" onClick={(e) => e.stopPropagation()}>
-            <div
-              className="personalized-hero"
-              style={{
-                backgroundImage: `url(${wedding?.image_url || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80'})`
-              }}
-            >
-              <div className="personalized-hero-overlay" />
-              <button className="modal-close-btn" onClick={() => setPreviewGuest(null)}>
-                ✕
-              </button>
-            </div>
-
-            <div className="personalized-body">
-              <span className="wedding-badge-gold">Wedding Invitation</span>
-
-              <h2 className="personalized-couple-name">
-                {wedding?.groom_name} & {wedding?.bride_name}
-              </h2>
-
-              <div className="guest-greeting-box">
-                <div className="greeting-to">Cordially Invited</div>
-                <h3 className="guest-personal-name">{previewGuest.guest.full_name}</h3>
-                <div className="guest-party-count">
-                  Party of {previewGuest.guest.guest_count} {previewGuest.guest.guest_count === 1 ? "Person" : "People"}
-                </div>
-              </div>
-
-              {wedding?.message && (
-                <p style={{ fontStyle: 'italic', color: '#cbd5e1', margin: 0, fontSize: '0.95rem' }}>
-                  "{wedding.message}"
-                </p>
-              )}
-
-              <div className="invitation-event-info">
-                <div className="info-pill">
-                  📅 {wedding?.wedding_date} at {wedding?.wedding_time}
-                </div>
-                <div className="info-pill">
-                  📍 {wedding?.location_name}
-                </div>
-              </div>
-
-              {/* Additional Images Strip */}
-              {wedding?.extra_images && wedding.extra_images.length > 0 && (
-                <div style={{ margin: "1rem 0", textAlign: "center" }}>
-                  <p style={{ margin: "0 0 0.5rem 0", fontSize: "0.75rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.1em" }}>
-                    ✦ Gallery Moments ({wedding.extra_images.length}) ✦
-                  </p>
-                  <div style={{ display: "flex", gap: "0.5rem", overflowX: "auto", paddingBottom: "0.5rem", justifyContent: wedding.extra_images.length <= 3 ? "center" : "flex-start" }}>
-                    {wedding.extra_images.map((imgUrl, i) => (
-                      <a key={i} href={imgUrl} target="_blank" rel="noopener noreferrer" style={{ flexShrink: 0 }}>
-                        <img
-                          src={imgUrl}
-                          alt={`Gallery ${i + 1}`}
-                          style={{ width: "68px", height: "68px", objectFit: "cover", borderRadius: "8px", border: "1px solid rgba(255, 255, 255, 0.2)" }}
-                        />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* QR Entrance Passcode */}
-              <div className="qr-preview-box" style={{ width: '100%', boxSizing: 'border-box' }}>
-                <div className="qr-code-wrapper">
-                  <QRCodeSVG
-                    value={previewGuest.invite.invitation_url}
-                    size={150}
-                    level="H"
-                  />
-                </div>
-                <span style={{ fontSize: '0.8rem', color: '#c084fc', fontWeight: 600 }}>
-                  Personal Guest Digital Access Passcode
+        <div className="invitation-modal-overlay" onClick={() => setPreviewGuest(null)}>
+          <div
+            className={`invitation-modal-window mode-${previewMode}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Navigation & Info Header */}
+            <div className="invitation-modal-header">
+              <div className="invitation-modal-title-group">
+                <h3 className="invitation-modal-title">
+                  <span>✉️</span>
+                  <span>Invitation for {previewGuest.guest.full_name}</span>
+                </h3>
+                <span className="invitation-modal-subtitle">
+                  {previewGuest.guest.guest_count} {previewGuest.guest.guest_count === 1 ? "Guest" : "Guests"} • {wedding?.groom_name} & {wedding?.bride_name}
                 </span>
               </div>
+
+              {/* Responsive Device View Toggle */}
+              <div className="invitation-view-switch">
+                <button
+                  type="button"
+                  className={`invitation-view-btn ${previewMode === "mobile" ? "active" : ""}`}
+                  onClick={() => setPreviewMode("mobile")}
+                  title="Switch to Mobile View (440px)"
+                >
+                  <span>📱</span>
+                  <span>Mobile</span>
+                </button>
+                <button
+                  type="button"
+                  className={`invitation-view-btn ${previewMode === "desktop" ? "active" : ""}`}
+                  onClick={() => setPreviewMode("desktop")}
+                  title="Switch to Expanded View"
+                >
+                  <span>💻</span>
+                  <span>Expanded</span>
+                </button>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="invitation-modal-actions">
+                <button
+                  type="button"
+                  className="invitation-tab-link-btn"
+                  onClick={() =>
+                    window.open(
+                      previewGuest.invite.invitation_url || `/invite/${previewGuest.invite.token}`,
+                      "_blank"
+                    )
+                  }
+                  title="Open exact invitation in a new browser tab"
+                >
+                  <span>Open in New Tab</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" />
+                  </svg>
+                </button>
+
+                <button
+                  type="button"
+                  className="invitation-close-btn"
+                  onClick={() => setPreviewGuest(null)}
+                  title="Close Preview (Esc)"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Live Exact Invitation Frame */}
+            <div className="invitation-modal-frame-wrap">
+              {iframeLoading && (
+                <div className="invitation-iframe-spinner-wrap">
+                  <div className="spinner" style={{ width: 36, height: 36 }} />
+                  <span>Loading exact invitation…</span>
+                </div>
+              )}
+              <iframe
+                src={`/invite/${previewGuest.invite.token}`}
+                title={`Invitation for ${previewGuest.guest.full_name}`}
+                className="invitation-modal-iframe"
+                onLoad={() => setIframeLoading(false)}
+              />
             </div>
           </div>
         </div>

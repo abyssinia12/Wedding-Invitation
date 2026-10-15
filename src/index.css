@@ -110,8 +110,80 @@ code {
   background: var(--code-bg);
 } */
 
-body{
+body {
   margin: 0;
   padding: 0;
+}
 
+/* ══════════════════════════════════════════════════════════════
+   Global Light Blue Button Design System
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  --primary-blue: #0284c7;
+  --primary-blue-hover: #0369a1;
+  --primary-blue-light: #0ea5e9;
+  --primary-blue-glow: rgba(14, 165, 233, 0.4);
+  --secondary-blue-bg: rgba(14, 165, 233, 0.12);
+  --secondary-blue-border: rgba(56, 189, 248, 0.35);
+  --secondary-blue-text: #38bdf8;
+}
+
+/* Primary Light Blue Button */
+.btn-primary {
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35) !important;
+  border: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%) !important;
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45) !important;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Secondary / Light Blue Outline Button */
+.btn-secondary {
+  background: rgba(14, 165, 233, 0.12) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  color: #38bdf8 !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(14, 165, 233, 0.25) !important;
+  border-color: rgba(56, 189, 248, 0.6) !important;
+  color: #ffffff !important;
+}
+
+/* Action Button */
+.action-btn {
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: #0284c7 !important;
+  border-color: #0ea5e9 !important;
+  color: #ffffff !important;
+  box-shadow: 0 3px 10px rgba(2, 132, 199, 0.35);
+}
+
+.action-btn.edit {
+  background: rgba(14, 165, 233, 0.18) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+.action-btn.edit:hover {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+  border-color: #0ea5e9 !important;
 }
