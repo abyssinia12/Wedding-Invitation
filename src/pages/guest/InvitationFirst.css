@@ -11,37 +11,6 @@
   overflow-x: hidden;
 }
 
-/* ── Floating ornaments ── */
-.f1-petals {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.f1-petal {
-  position: absolute;
-  color: rgba(201, 168, 76, 0.15);
-  font-size: 1rem;
-  animation: f1Float linear infinite;
-}
-
-.f1-petal-1 { left: 8%; animation-duration: 14s; animation-delay: 0s; font-size: 0.8rem; }
-.f1-petal-2 { left: 22%; animation-duration: 18s; animation-delay: 2s; }
-.f1-petal-3 { left: 40%; animation-duration: 12s; animation-delay: 4s; font-size: 1.2rem; }
-.f1-petal-4 { left: 58%; animation-duration: 16s; animation-delay: 1s; }
-.f1-petal-5 { left: 72%; animation-duration: 20s; animation-delay: 3s; font-size: 0.7rem; }
-.f1-petal-6 { left: 85%; animation-duration: 13s; animation-delay: 5s; }
-.f1-petal-7 { left: 15%; animation-duration: 17s; animation-delay: 7s; font-size: 1.1rem; }
-.f1-petal-8 { left: 92%; animation-duration: 15s; animation-delay: 6s; font-size: 0.9rem; }
-
-@keyframes f1Float {
-  0%   { transform: translateY(105vh) rotate(0deg); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-}
 
 /* ── Wrapper ── */
 .f1-wrapper {

@@ -129,12 +129,6 @@ export default function InvitationFirst({ invite, wedding, guest }) {
     <div className="f1-page">
       <div className="f1-wrapper">
 
-        {/* Floating ornaments */}
-        <div className="f1-petals" aria-hidden="true">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className={`f1-petal f1-petal-${i + 1}`}>✦</div>
-          ))}
-        </div>
 
         {/* ── 1. Image banner (groom & bride at bottom) ── */}
         <div className="f1-image-banner">

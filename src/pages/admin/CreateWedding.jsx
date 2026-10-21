@@ -9,7 +9,7 @@ const INVITATION_STYLES = [
     key: "first",
     name: "Style 1 — Royal Crimson",
     tag: "Ornate & Regal",
-    desc: "Deep crimson velvet background, sparkling gold accents, Great Vibes calligraphy, and floating golden petals.",
+    desc: "Deep crimson velvet background, sparkling gold accents, and Great Vibes calligraphy.",
     swatch: ["#8b0000", "#c9a84c", "#f5e6c8"],
     emoji: "👑",
   },
