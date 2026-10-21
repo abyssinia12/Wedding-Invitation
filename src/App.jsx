@@ -95,8 +95,10 @@ function App() {
           }
         />
 
-        {/* Public Guest Personalized Invitation Route */}
+        {/* Public Guest Personalized Invitation Routes */}
+        <Route path="/invite/:invitationId" element={<PublicInvitation />} />
         <Route path="/invite/:token" element={<PublicInvitation />} />
+        <Route path="/invite" element={<PublicInvitation />} />
 
         {/* Invitation Styles Preview Route (first, second, thered) */}
         <Route path="/invitation-styles" element={<InvitationStylesPreview />} />
